@@ -29,7 +29,6 @@ While the virtual environment is activated, you can use pip to install the neces
 
 
 pip install indico
-pip install xhtml2pdf
 
 
 4. Install the Plugin:
@@ -37,7 +36,7 @@ pip install xhtml2pdf
 Install your plugin in your Indico virtual environment using pip. Make sure you provide the correct path to your plugin directory:
 
 
-pip install -e /path/to/your/plugin/directory
+pip install -e .
 
 
 5. Update Indico Configuration:
@@ -53,10 +52,20 @@ plugins = indico-plugin1, indico-plugin2, indico-pdf-generator
 
 6. Restart Your Indico Instance:
 
-After updating the configuration, restart your Indico instance to apply the changes. You can do this using the systemctl command:
+Start the postgresql and redis-server
+
+sudo service postgresql start
+sudo service redis-server start
 
 
-sudo systemctl restart indico
+After updating the configuration, restart your Indico instance to apply the changes. 
+Run the commands in the terminal in the dev/indico/src or similar directory
+
+indico run -h localhost -q --enable-evalex
+
+in other terminal parallely-
+./bin/maintenance/build-assets.py indico --dev --watch
+
 
 
 7. Access Your Plugin:
@@ -64,13 +73,9 @@ sudo systemctl restart indico
 Your plugin should now be available within your Indico instance. Access it through the URL or route you defined in your blueprint
 
 
-https://your-indico-instance.com/generate_pdf
+https://localhost/pdf-generator-plugin/event/<event_id>
 
-
-8. Test the Plugin:
-
-Click on the 4 buttons and see if they all work as intended.
-
+8. Test the Plugin
 
 9. Deactivate the Virtual Environment only after testing all things and closing the system:
 
