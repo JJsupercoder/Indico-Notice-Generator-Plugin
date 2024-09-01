@@ -1,0 +1,53 @@
+<div class="i-form no-max-width event-person-list js-event-person-list">
+    <div class="flashed-messages"></div>
+    <div>
+        <div class="toolbar space-after">
+            <button class="icon-checkbox-checked i-button arrow js-dropdown hide-if-locked"
+                    data-toggle="dropdown"></button>
+            <ul class="i-dropdown hide-if-locked">
+                <li>
+                    <a href="#" data-select-all="#person-list-table input.select-row:visible">
+                        {%- trans %}All{% endtrans -%}
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-select-none="#person-list-table input.select-row:visible">
+                        {%- trans %}None{% endtrans -%}
+                    </a>
+                </li>
+            </ul>
+            {% if self.selection_toolbar() %}
+                <div class="group i-selection">
+                    <span class="i-button label">{% trans %}Show{% endtrans %}</span>
+                    {% block selection_toolbar %}{% endblock %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div id="person-list-table">
+        <table class="i-table-widget tablesorter">
+            <thead>
+                <tr class="i-table">
+                    {% block table_head %}{% endblock %}
+                </tr>
+            </thead>
+            <tbody class="scroll">
+                {% block table_body %}{% endblock %}
+            </tbody>
+        </table>
+    </div>
+    <div class="form-group-mail hide-if-locked">
+        <div id="persons-email"
+             data-event-id="{{ event.id }}"
+             data-person-selector="#person-list-table input[name=person_identifier][type=checkbox]:checked">
+        </div>
+        <button id="persons-email-trigger"
+                class="i-button icon-mail right highlight disabled js-requires-selected-row">
+            {%- trans %}Send email{% endtrans -%}
+        </button>
+    </div>
+</div>
+<script>
+    setupEventPersonsList();
+    setupEmailButton('#persons-email', '#persons-email-trigger');
+</script>

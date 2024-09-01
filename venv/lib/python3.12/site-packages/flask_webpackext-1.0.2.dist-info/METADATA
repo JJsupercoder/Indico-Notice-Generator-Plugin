@@ -1,0 +1,120 @@
+Metadata-Version: 2.1
+Name: flask-webpackext
+Version: 1.0.2
+Summary: Webpack integration for Flask.
+Home-page: https://github.com/inveniosoftware/flask-webpackext
+Author: CERN
+Author-email: info@inveniosoftware.org
+License: BSD
+Keywords: flask webpack
+Platform: UNKNOWN
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Development Status :: 5 - Production/Stable
+Requires-Dist: Flask (>=0.11)
+Requires-Dist: pynpm (>=0.1.1)
+Requires-Dist: pywebpack (>=1.0.0)
+Provides-Extra: all
+Requires-Dist: Sphinx (<3,>=1.5.1) ; extra == 'all'
+Requires-Dist: sphinx-click (>=1.4.0) ; extra == 'all'
+Requires-Dist: check-manifest (>=0.25) ; extra == 'all'
+Requires-Dist: coverage (>=4.0) ; extra == 'all'
+Requires-Dist: isort (>=4.3.21) ; extra == 'all'
+Requires-Dist: pydocstyle (>=1.0.0) ; extra == 'all'
+Requires-Dist: pytest-cache (>=1.0) ; extra == 'all'
+Requires-Dist: pytest-cov (>=1.8.0) ; extra == 'all'
+Requires-Dist: pytest-pep8 (>=1.0.6) ; extra == 'all'
+Requires-Dist: pytest (>=2.8.0) ; extra == 'all'
+Provides-Extra: docs
+Requires-Dist: Sphinx (<3,>=1.5.1) ; extra == 'docs'
+Requires-Dist: sphinx-click (>=1.4.0) ; extra == 'docs'
+Provides-Extra: tests
+Requires-Dist: check-manifest (>=0.25) ; extra == 'tests'
+Requires-Dist: coverage (>=4.0) ; extra == 'tests'
+Requires-Dist: isort (>=4.3.21) ; extra == 'tests'
+Requires-Dist: pydocstyle (>=1.0.0) ; extra == 'tests'
+Requires-Dist: pytest-cache (>=1.0) ; extra == 'tests'
+Requires-Dist: pytest-cov (>=1.8.0) ; extra == 'tests'
+Requires-Dist: pytest-pep8 (>=1.0.6) ; extra == 'tests'
+Requires-Dist: pytest (>=2.8.0) ; extra == 'tests'
+
+==================
+ Flask-WebpackExt
+==================
+
+.. image:: https://img.shields.io/travis/inveniosoftware/flask-webpackext.svg
+        :target: https://travis-ci.org/inveniosoftware/flask-webpackext
+
+.. image:: https://img.shields.io/coveralls/inveniosoftware/flask-webpackext.svg
+        :target: https://coveralls.io/r/inveniosoftware/flask-webpackext
+
+.. image:: https://img.shields.io/github/tag/inveniosoftware/flask-webpackext.svg
+        :target: https://github.com/inveniosoftware/flask-webpackext/releases
+
+.. image:: https://img.shields.io/pypi/dm/flask-webpackext.svg
+        :target: https://pypi.python.org/pypi/flask-webpackext
+
+.. image:: https://img.shields.io/github/license/inveniosoftware/flask-webpackext.svg
+        :target: https://github.com/inveniosoftware/flask-webpackext/blob/master/LICENSE
+
+Webpack integration for Flask.
+
+Flask-WebpackExt makes it easy to interface with your existing Webpack project
+from Flask and does not try to manage Webpack for you. Flask-WebpackExt does
+this via:
+
+* **Manifests**: You tell Webpack to write a ``manifest.json`` using plugins
+  such as `webpack-manifest-plugin
+  <https://www.npmjs.com/package/webpack-manifest-plugin>`_,
+  `webpack-yam-plugin
+  <https://www.npmjs.com/package/webpack-yam-plugin>`_ or
+  `webpack-bundle-tracker
+  <https://www.npmjs.com/package/webpack-bundle-tracker>`_. Flask-WebpackExt
+  reads the manifest and makes your compiled assets available in your Jinja
+  templates.
+* **CLI for NPM**: Flask-WebpackExt provides a Flask CLI so that e.g.
+  ``flask webpack install`` will run ``npm install`` in your Webpack project.
+  Similarly, ``flask webpack build`` will run ``npm run build``.
+
+Optionally you can use Flask-WebpackExt to also:
+
+* **Inject configuration:** Flask-WebpackExt will write a ``config.json`` into
+  your Webpack project, which you can import in your Webpack configuration. You
+  define what goes in the config e.g. Let Webpack know about output paths or
+  dynamic entry points.
+* **Collect bundles:** If your Webpack project is spread over multiple Python
+  packages, Flask-WebpackExt can help you dynamically assemble the files into a
+  Webpack project. This is useful if you don't know until runtime which
+  packages are installed.
+
+Further documentation is available on
+https://flask-webpackext.readthedocs.io/
+
+
+Changes
+=======
+
+Version 1.0.2 (released 2020-05-13)
+
+- Deprecated Python versions lower than 3.6.0. Now supporting 3.6.0 and 3.7.0
+- Set Sphinx ``<3`` because of errors related to application context
+- Stop using example app
+
+Version 1.0.1 (released 2018-12-14)
+
+- Pypi classifier and deployment configuration
+- License detection
+
+Version 0.1.0 (released 2016-05-29)
+
+- Initial public release.
+
+

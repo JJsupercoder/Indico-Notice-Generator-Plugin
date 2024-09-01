@@ -1,0 +1,100 @@
+/*
+ *
+ * this file is  css styelsheet  for generic.xsl file
+ *
+*/
+
+div.inbody {
+  background: white;
+  font-family: "Times New Roman", Times, serif;
+}
+div.inbody {
+  width: 98%;
+  margin-left: 2px;
+  margin-right: 2%;
+  position: relative;
+}
+div.inbody {
+  margin: 0 auto;
+}
+div.inbody h5 {
+  color: #000000;
+  font-size: 1.2em;
+  font-weight: normal;
+}
+
+div.inbody h2 {
+  text-align: center;
+  font-size: 1.4em;
+  margin-top: 0.5cm;
+  color: #000000;
+  -webkit-margin-before: 0em;
+  -webkit-margin-after: 0em;
+}
+
+div.inbody h3 {
+  text-align: center;
+  font-size: 3.5em;
+  margin-top: 0.5cm;
+  color: darkblue;
+  transform: rotate(-5deg);
+}
+div.inbody h5 {
+  text-align: right;
+  margin-right: 34px;
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0em;
+}
+div.inbody p {
+  margin-left: 0px;
+  margin-right: 0px;
+  font-size: 1.2em;
+  text-align: justify;
+}
+div.inbody p.pre {
+  margin-left: 0px;
+  margin-right: 0px;
+  font-size: 1.2em;
+  text-align: justify;
+  white-space: pre-line;
+}
+
+div.inbody table {
+  width: 98%;
+  margin-left: 0.2em;
+  margin-right: 0.5em;
+  padding: 0;
+}
+div.inbody table.tab {
+  width: 100%;
+}
+div.inbody table.tab td {
+  margin: 0;
+  padding: 10px;
+  font-weight: bold;
+  font-size: 1.5em;
+}
+div.inbody table.newtab td {
+  margin: 0;
+  padding: 10px;
+  font-weight: bold;
+  font-size: 1.5em;
+  white-space: nowrap;
+}
+div.inbody table.tab th {
+  margin: left;
+  padding: 10px;
+}
+
+div.header {
+  text-align: center;
+  font-size: 0.8em;
+  color: #f9c878;
+}
+
+div.header h1 {
+  color: black;
+  text-align: center;
+  font-size: 2em;
+  margin-top: 0.5cm;
+}

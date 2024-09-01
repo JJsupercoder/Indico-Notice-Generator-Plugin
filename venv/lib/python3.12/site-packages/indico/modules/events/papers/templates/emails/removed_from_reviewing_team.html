@@ -1,0 +1,12 @@
+{% extends 'events/papers/emails/base.html' %}
+
+{% block subject_message %}{% trans %}Removed from paper reviewing team{% endtrans %}{% endblock %}
+
+{% block header_subtitle %}{% trans %}Removed from paper reviewing team{% endtrans %}{% endblock %}
+
+{% block content %}
+    <p>{% trans name=receiver.first_name %}Dear {{ name }},{% endtrans %}</p>
+    <p>{% trans strong='<strong>'|safe, endstrong='</strong>'|safe, role_title=role.title, event_title=event.title -%}
+        Please, be aware that you are no longer a {{ strong }}{{ role_title }}{{ endstrong }} for the conference {{ strong }}{{ event_title }}{{ endstrong }}.
+    {%- endtrans %}</p>
+{% endblock %}

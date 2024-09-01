@@ -1,0 +1,23 @@
+{% macro render_draft_mode_warning(event, can_publish=true) %}
+    <div id="draft-mode-warning" class="action-box warning draft-mode">
+        <div class="section">
+            <div class="icon icon-edit"></div>
+            <div class="text">
+                <div class="label">{% trans %}Contributions are in draft mode{% endtrans %}</div>
+                {% trans %}
+                    While in draft mode, regular users cannot see the contributions and timetable.
+                {% endtrans %}
+            </div>
+            <div class="toolbar">
+                <div id="draft-mode-warning-button-container" data-event-id="{{ event.id }}" class="group"></div>
+            </div>
+        </div>
+
+        {% if can_publish %}
+            <script>
+                // Render PublicationModal into #draft-mode-warning-button
+                setupDraftModeWarning();
+            </script>
+        {% endif %}
+    </div>
+{% endmacro %}

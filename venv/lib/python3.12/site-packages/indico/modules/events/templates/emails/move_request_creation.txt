@@ -1,0 +1,38 @@
+{% extends 'emails/base_i18n.txt' %}
+
+{% block subject -%}
+    {% trans %}Event move request created{% endtrans %}
+{%- endblock %}
+
+{% block header -%}{%- endblock %}
+
+{% block body -%}
+    {%- filter dedent -%}
+        {%- if events|length == 1 -%}
+            {% trans %}There is a new move request for the category:{% endtrans %}
+        {%- else -%}
+            {% trans %}There are new move requests for the category:{% endtrans %}
+        {%- endif %}
+        {{ target_category.chain_titles|join(' » ') }}
+
+        {% filter underline %}{% trans %}Requested events{% endtrans %}{% endfilter %}
+        {%- for evt in events %}
+            {{ evt.title }} ({{ evt.external_url }})
+        {%- endfor -%}
+
+        {% if comment %}
+
+            {% filter underline %}{% trans %}Comment{% endtrans %}{% endfilter %}
+            {{ comment }}
+        {%- endif %}
+
+        {% trans %}View all move requests here:{% endtrans %}
+        {{ url_for('categories.manage_moderation', target_category, _external=true) }}
+    {%- endfilter -%}
+{%- endblock %}
+
+{% block footer_title -%}
+    {% trans %}Event notifications{% endtrans %}
+{%- endblock %}
+
+{% block footer_url %}{% endblock %}

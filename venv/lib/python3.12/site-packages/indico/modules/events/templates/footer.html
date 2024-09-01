@@ -1,0 +1,17 @@
+{% extends 'footer.html' %}
+
+{% block footer_extra %}
+    {%- set url = event.short_external_url -%}
+
+    {% if show_social %}
+        <ind-share-widget
+            event-name="{{ event.title }}"
+            event-start-dt="{{ event.start_dt | format_datetime(format='d MMMM YYYY') }}"
+            event-url="{{ url }}"
+            share-icon="{{ url_for('assets.image', filename='share-widget.svg') }}"
+            google-cal-params="{{ google_calendar_params|urlencode }}"
+            outlook-cal-params="{{ outlook_calendar_params|urlencode }}"
+        >
+        </ind-share-widget>
+    {% endif %}
+{% endblock %}

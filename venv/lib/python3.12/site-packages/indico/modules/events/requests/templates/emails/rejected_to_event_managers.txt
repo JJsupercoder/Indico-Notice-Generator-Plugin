@@ -1,0 +1,12 @@
+{% extends 'events/requests/emails/base_to_event_managers.txt' %}
+
+{% block request_subject -%}
+    {% trans %}Request rejected{% endtrans %}
+{%- endblock %}
+
+{% block request_message -%}
+    {% trans title=req.definition.title %}The {{ title }} request for your event has been rejected.{% endtrans %}
+    {%- if req.comment %}
+        {% trans %}Comment:{% endtrans %} {{ req.comment }}
+    {%- endif -%}
+{%- endblock %}

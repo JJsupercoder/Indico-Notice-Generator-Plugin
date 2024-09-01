@@ -1,0 +1,21 @@
+{% macro get_subject() -%}
+    {% trans %}Please register{% endtrans %}
+{%- endmacro %}
+
+{% macro get_html_body() -%}
+    {% trans %}Dear {first_name},{% endtrans %}<br>
+    <br>
+    {% trans strong='<strong>'|safe, endstrong='</strong>'|safe %}You have been added with some submission privileges to the event {{ strong }}{event_title}{{ endstrong }}.{% endtrans %}<br>
+    <br>
+    <br>
+    {% trans %}To use those privileges, you need to create a new Indico profile.{% endtrans %}<br>
+    {% trans %}You can do so at the following URL:{% endtrans %}<br>
+    {register_link}<br>
+    <br>
+    {% trans strong='<strong>'|safe, endstrong='</strong>'|safe %}When creating the profile, please make sure to use the email address {{ strong }}{email}{{ endstrong }}.{% endtrans %}<br>
+    {% trans strong='<strong>'|safe, endstrong='</strong>'|safe %}If you already have an Indico profile, simply add the email address {{ strong }}{email}{{ endstrong }} to your profile.{% endtrans %}
+    <br>
+    <br>
+    {% trans %}Best regards{% endtrans %}<br>
+    {{ session.user.full_name }}
+{%- endmacro %}

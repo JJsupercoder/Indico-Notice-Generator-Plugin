@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calendar of Events: Print to File</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('plugin_indico_pdf_generator.static', filename='indico_pdf_generator/css/dcs.css') }}" />
+    <script>
+      function printDiv(divID) {
+        var divElements = document.getElementById(divID).innerHTML;
+        var oldPage = document.body.innerHTML;
+        document.body.innerHTML =
+          "<html><head><title></title></head><body>" + divElements + "</body>";
+        window.print();
+        document.body.innerHTML = oldPage;
+        attachListener();
+      }
+
+      function attachListener() {
+        const val = document.querySelector(".inbody");
+        const zoomin = document.querySelector(".btn.zoom-in");
+        const zoomout = document.querySelector(".btn.zoom-out");
+
+        function zoom_in() {
+          const fonsi = window
+            .getComputedStyle(val, null)
+            .getPropertyValue("font-size");
+          const currentSize = parseFloat(fonsi);
+          val.style.fontSize = currentSize + 1 + "px";
+        }
+
+        if (zoomin) {
+          zoomin.addEventListener("click", zoom_in);
+        }
+
+        function zoom_out() {
+          const fonsi = window
+            .getComputedStyle(val, null)
+            .getPropertyValue("font-size");
+          const currentSize = parseFloat(fonsi);
+          val.style.fontSize = currentSize - 1 + "px";
+        }
+
+        if (zoomout) {
+          zoomout.addEventListener("click", zoom_out);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", attachListener);
+    </script>
+  </head>
+  <body>
+    <div class="mainbody">
+      
+      <div class="titlebar">
+        <form method="post" action="/pdf-generator-plugin/event/{{event.id}}">
+          Select:&nbsp;
+          <select
+            id="viewSelect"
+            name="view"
+            onchange="this.form.submit()"
+            style="font-size: 8pt"
+          >
+            <option value="generic.html">Generic Notice Layout</option>
+            <option value="daa.html">DAA Notice Layout</option>
+            <option value="dbs.html">DBS Notice Layout</option>
+            <option value="dcs.html" selected>DCS Notice Layout</option>
+            <option value="dcmp.html">DCMP Notice Layout</option>
+            <option value="dhep.html">DHEP Notice Layout</option>
+            <option value="dnap.html">DNAP Notice Layout</option>
+            <option value="dtp.html">DTP Notice Layout</option>
+            <option value="stcs.html">STCS Notice Layout</option>
+            <option value="wednesdaytalks.html">
+              Wednesday Colloquium Notice Layout
+            </option>
+            <option value="aset.html">ASET Colloquium Notice Layout</option>
+            <option value="testDAA.html">Demo Notice Layout</option>
+          </select>
+
+          | Layout View: DCS &nbsp; |
+          <input
+            type="button"
+            value="Print Notice"
+            onclick="javascript:printDiv('printablediv')"
+          />
+          <button type="button" class="btn zoom-in">Increase Size</button>
+          <button type="button" class="btn zoom-out">Decrease Size</button>
+          <br />
+        </form>
+      </div>
+      
+      <div id="printablediv">
+        <div class="inbody">
+            <div class="header">
+                <h2><u>Tata Institute of Fundamental Research</u></h2>
+                <h1>Chemical Sciences Seminar</h1>
+            </div>
+            <table class="tab">
+                <tr>
+                    <td><b>Speaker</b></td>
+                    <td>: &nbsp;{{speaker}}<br>&nbsp;&nbsp;&nbsp;&nbsp;<i>{{speaker_designation}}</i></td>
+                </tr>
+                <tr>
+                    <td><b>Title</b></td>
+                    <td>: &nbsp;{{title}}</td>
+                </tr>
+                <tr>
+                    <td><b>Date</b></td>
+                    <td>: &nbsp;<span>{{date}}</span>&nbsp;&nbsp;&nbsp;</td>
+                </tr>
+                <tr>
+                    <td><b>Time</b></td>
+                    <td>: <span class="bold">{{time}}</span></td>
+                </tr>
+                <tr>
+                    <td><b>Venue</b></td>
+                    <td>: &nbsp;{{venue}}&nbsp;&nbsp;</td>
+                </tr>
+            </table>
+            <p>
+                <b>Abstract</b><br>&nbsp;<br>
+                {{abstract}}
+              </p><h5>Dr. Satyanarayana Bheesette<br> Department of Chemical Sciences</h5>
+        </div>
+    </div>
+    <br />
+    </body>
+    </html>
+    

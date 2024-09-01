@@ -1,0 +1,36 @@
+{% extends 'layout/management_page.html' %}
+
+{% block page_class %}category-calendar-page{% endblock %}
+
+{% block side_menu %}
+    <div class="category-calendar-side-menu">
+        <div id="category-calendar-legend"></div>
+    </div>
+{% endblock %}
+
+{% block display_view_button %}
+    <div class="group">
+        <a href="{{ url_for('categories.display', category) }}" class="icon-arrow-left highlight i-button">
+            {% trans %}Back to category page{% endtrans %}
+        </a>
+    </div>
+{% endblock %}
+
+{% block banner_title %}
+    {{ category.title }}
+{% endblock %}
+
+{% block content %}
+    <div class="category-calendar-view">
+        <div id="event-calendar"></div>
+    </div>
+    <script>
+        setupCategoryCalendar(
+            '#event-calendar',
+            'category-calendar-legend',
+            {{ category.display_tzinfo.zone | tojson }},
+            {{ url_for('categories.calendar_events', category) | tojson }},
+            {{ category.id }}
+        );
+    </script>
+{% endblock %}

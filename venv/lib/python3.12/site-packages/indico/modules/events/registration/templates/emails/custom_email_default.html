@@ -1,0 +1,31 @@
+{% extends 'emails/base_i18n.html' %}
+
+{% block header_recipient -%}
+   {% trans %}Dear {first_name},{% endtrans %}
+{%- endblock %}
+
+{% block body %}
+    {% block body_text %}
+        {% trans strong='<strong>'|safe, endstrong='</strong>'|safe -%}
+            We're contacting you because you registered for the event {{ strong }}{event_title}{{ endstrong }}.
+        {%- endtrans %}<br>
+        <br><br>
+
+        {% trans %}You can view your registration details on this page:{% endtrans %}<br>
+        {link}
+    {% endblock %}
+
+    {% if session %}
+        <br><br>
+        {% trans %}Best regards{% endtrans %}<br>
+        {{ session.user.full_name }}
+    {% endif %}
+{%- endblock %}
+
+{% block footer_title %}{% trans %}Registration{% endtrans %}{% endblock %}
+{% block footer %}
+    {# Show default footer if sent from command line #}
+    {% if not session.user %}
+        {{ super() }}
+    {% endif %}
+{% endblock %}

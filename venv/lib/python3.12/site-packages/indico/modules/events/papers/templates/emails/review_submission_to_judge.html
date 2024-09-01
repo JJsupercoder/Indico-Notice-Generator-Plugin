@@ -1,0 +1,44 @@
+{% extends 'events/papers/emails/base.html' %}
+
+{% block subject_message %}{% trans %}Paper reviewed{% endtrans %}{% endblock %}
+
+{% block header_subtitle %}{% trans %}Paper reviewed{% endtrans %}{% endblock %}
+
+{% block header_subtitle_ref %}{% trans id=contribution.friendly_id %}ref #{{ id }}{% endtrans %}{% endblock %}
+
+{% block content_header %}
+    <p>{% trans name=receiver.first_name %}Dear {{name }},{% endtrans %}</p>
+    <p>{% trans strong='<strong>'|safe, endstrong='</strong>'|safe, title=contribution.title -%}
+        A reviewer just left a review on the paper {{ strong }}"{{ title }}"{{ endstrong }}.
+    {%- endtrans %}</p>
+    <p>{% trans %}In order to cast your judgment please follow the link to the paper below:{% endtrans %}</p>
+    <p>
+        <a href="{{ url_for('papers.paper_timeline', contribution, _external=true) }}">
+            {{- url_for('papers.paper_timeline', contribution, _external=true) -}}
+        </a>
+    </p>
+{% endblock %}
+
+{% block content_body %}
+    <dl>
+        <dt style="width: 30%; float: left;">{% trans %}Reviewer:{% endtrans %}</dt>
+        <dd style="width: 70%; float: left; margin: 0; min-height: 20px; white-space: pre-wrap; word-break: break-all; padding-left: 20px; box-sizing: border-box;">
+            {{- review.user.full_name -}}
+        </dd>
+        <dt style="width: 30%; float: left;">{% trans %}Review type:{% endtrans %}</dt>
+        <dd style="width: 70%; float: left; margin: 0; min-height: 20px; white-space: pre-wrap; word-break: break-all; padding-left: 20px; box-sizing: border-box;">
+            {{- review.type.title -}}
+        </dd>
+        <dt style="width: 30%; float: left;">{% trans %}Proposed action:{% endtrans %}</dt>
+        <dd style="width: 70%; float: left; margin: 0; min-height: 20px; white-space: pre-wrap; word-break: break-all; padding-left: 20px; box-sizing: border-box;">
+            {{- review.proposed_action.title -}}
+        </dd>
+        {% if review._comment %}
+            <dt style="width: 30%; float: left;">{% trans %}Comment:{% endtrans %}</dt>
+            <dd style="width: 70%; float: left; margin: 0; min-height: 20px; white-space: pre-wrap; word-break: break-all; padding-left: 20px; box-sizing: border-box;">
+                {{- review._comment -}}
+            </dd>
+        {% endif %}
+    </dl>
+    <div style="clear: both;"></div>
+{% endblock %}

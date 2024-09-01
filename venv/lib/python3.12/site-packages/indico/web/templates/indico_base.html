@@ -1,0 +1,90 @@
+{#- Base template for indico pages (standard "indico look") -#}
+{%- from 'core/session_expiry.html' import setup_session_expiry -%}
+
+<!DOCTYPE html>
+
+<html lang="{{ current_locale.language }}"
+      prefix="og: http://ogp.me/ns#"
+      data-canonical-locale="{{ current_locale.html_locale }}"
+      data-static-site="{{ g.get('static_site', false)|tojson|forceescape }}">
+<head>
+    <title>
+        {%- if page_title %}{{ page_title }} · {% endif %}
+        {{- site_name -}}
+        {% if 'Indico' not in site_name %} (Indico){% endif -%}
+    </title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="csrf-token" id="csrf-token" content="{{ session.csrf_token }}">
+    {%- set favicon_url = indico_config.FAVICON_URL or (indico_config.IMAGES_BASE_URL + '/indico.ico') %}
+    <link rel="shortcut icon" type="image/x-icon" href="{{ favicon_url }}">
+
+    {% include 'meta.html' %}
+
+    {% block extra_meta_tags %}
+    {% endblock %}
+
+    <script type="text/javascript" src="{{ url_for('assets.i18n_locale', locale_name=current_locale) }}"></script>
+    <script type="text/javascript" src="{{ url_for('assets.i18n_locale_react', locale_name=current_locale) }}"></script>
+    <script type="text/javascript" src="{{ url_for('assets.js_vars_global') }}"></script>
+
+    {% for bundle in bundles -%}
+        {{ bundle }}
+    {% endfor %}
+    {% for bundle in print_bundles -%}
+        {% for path in bundle._paths -%}
+            <link rel="stylesheet" type="text/css" media="print" href="{{ path }}">
+        {% endfor %}
+    {% endfor %}
+
+    {% for url in js_files -%}
+        <script type="text/javascript" src="{{ url }}"></script>
+    {% endfor %}
+
+    {% block late_js %}
+        <script>
+            moment.locale([{{ session.moment_lang|tojson }}, 'en']);
+            IndicoGlobalVars.isUserAuthenticated = {{ session.user|bool|tojson }};
+        </script>
+    {% endblock %}
+
+    <script type="text/javascript" src="{{ url_for('assets.js_vars_user') }}"></script>
+
+    {{ head_content|default('')|safe }}
+
+    {% for url in css_files -%}
+        <link rel="stylesheet" type="text/css" href="{{ url }}">
+    {% endfor %}
+
+    {{ template_hook('html-head') }}
+</head>
+<body data-user-id="{{ session.user.id if session.user else 'null' }}"
+      data-debug="{{ config.DEBUG|tojson|forceescape }}"
+      {% if tinymce_content_css_urls is defined %}
+          data-tinymce-content-css="{{ tinymce_content_css_urls|tojson|forceescape }}"
+      {% endif %}>
+    <ind-bypass-block-links></ind-bypass-block-links>
+    {% block html_body %}
+        {#-
+        XXX: Using a block and inheritance would be nicer but for now this
+        is only called from a WP so just passing the contents is much easier
+        #}
+        {{ body|safe }}
+    {% endblock %}
+    {{ setup_session_expiry() }}
+</body>
+</html>
+{%- set req_stats = get_request_stats() %}
+<!--
+Queries:         {{ req_stats.query_count }}
+Duration (sql):  {{ '%.06fs'|format(req_stats.query_duration) }}
+Duration (req):  {{ '%.06fs'|format(req_stats.req_duration) }}
+{%- if session.user and session.user.is_admin %}
+Worker:          {{ indico_config.WORKER_NAME }}
+{%- endif %}
+Endpoint:        {{ request.endpoint }}
+{%- if g.rh %}
+RH:              {{ g.rh.__class__.__module__ }}.{{ g.rh.__class__.__name__ }}
+{%- endif %}
+WP:              {{ wp_class.__module__ }}.{{ wp_class.__name__ }}
+-->

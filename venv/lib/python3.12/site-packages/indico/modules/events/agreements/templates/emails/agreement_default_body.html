@@ -1,0 +1,31 @@
+{% extends 'emails/base_i18n.html' %}
+
+{% block header_recipient -%}
+    {% trans %}Dear {person_name},{% endtrans %}
+{%- endblock %}
+
+{% block body %}
+    {% block body_text %}
+        {% trans %}There is an agreement you are requested to sign for the event:{% endtrans %}<br>
+        <strong>{{ event.title }}</strong><br><br>
+
+        {% block body_agreement_request %}
+            {% trans %}You can sign it on the following page:{% endtrans %}
+        {% endblock %}<br>
+        {agreement_link}
+    {% endblock %}
+
+    {% if session %}
+        <br><br>
+        {% trans %}Best regards{% endtrans %}<br>
+        {{ session.user.full_name }}
+    {% endif %}
+{%- endblock %}
+
+{% block footer_title %}{% trans %}Agreements{% endtrans %}{% endblock %}
+{% block footer %}
+    {# Show default footer if sent from command line #}
+    {% if not session.user %}
+        {{ super() }}
+    {% endif %}
+{% endblock %}

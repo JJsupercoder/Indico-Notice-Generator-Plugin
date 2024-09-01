@@ -1,0 +1,11 @@
+{% macro get_subject() -%}{%- endmacro %}
+
+{% macro get_html_body() -%}
+    {% trans %}Dear {first_name},{% endtrans %}<br>
+    <br>
+
+    <br>
+    <br>
+    {% trans %}Best regards{% endtrans %}<br>
+    {{ session.user.full_name }}
+{%- endmacro %}

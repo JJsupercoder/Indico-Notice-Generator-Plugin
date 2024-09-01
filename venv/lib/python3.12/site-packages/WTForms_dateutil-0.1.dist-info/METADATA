@@ -1,0 +1,42 @@
+Metadata-Version: 2.1
+Name: WTForms-dateutil
+Version: 0.1
+Summary: WTForms fields using dateutil
+Home-page: http://github.com/wtforms/wtforms-dateutil/
+Maintainer: WTForms Team
+Maintainer-email: wtforms@simplecodes.com
+License: BSD
+Project-URL: Code, https://github.com/wtforms/wtforms-dateutil
+Project-URL: Issue Tracker, https://github.com/wtforms/wtforms-dateutil/issues
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE.md
+Requires-Dist: WTForms (>=1.0.5)
+Requires-Dist: python-dateutil
+
+# wtforms-dateutil
+WTForms integration for dateutil
+
+```
+pip install wtforms-dateutil
+```
+
+```python
+from wtforms_dateutil import DateField, DateTimeField
+```
+
+

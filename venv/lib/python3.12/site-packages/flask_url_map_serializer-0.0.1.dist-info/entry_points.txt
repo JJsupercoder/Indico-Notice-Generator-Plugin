@@ -1,0 +1,3 @@
+[flask.commands]
+url_map_to_json = flask_url_map_serializer:cli
+

@@ -1,0 +1,11 @@
+Dear John Doe,
+
+Your revision changes have been confirmed by Jane Doe.
+Contribution: #1 (Dummy Contribution)
+
+You can view details on the following URL:
+http://localhost/timeline-url
+
+--
+Indico :: Email Notifier
+http://localhost/

@@ -1,0 +1,55 @@
+{% extends 'users/base.html' %}
+
+{% block user_content %}
+    <div class="i-box-group vert">
+        <div class="i-box">
+            <div class="i-box-header">
+                <div class="i-box-title">
+                    {%- trans %}Details{% endtrans -%}
+                </div>
+                {% if session.user.is_admin %}
+                    <div class="i-box-buttons">
+                        {% if not user.is_blocked %}
+                            <div {%- if user == session.user %} title="{% trans %}You cannot block yourself{% endtrans %}"{% endif %}>
+                                <button class="ui negative small button"
+                                        data-href="{{ url_for('.user_block') }}"
+                                        data-method="PUT"
+                                        data-confirm="{% trans %}This user will no longer have access to Indico.
+                                        Are you sure you want to revoke their access?{% endtrans %}"
+                                        data-reload-after
+                                        {% if user == session.user %}disabled{% endif %}>
+                                    {% trans %}Block User{% endtrans %}
+                                </button>
+                            </div>
+                        {% else %}
+                            <button class="ui small button"
+                                    data-href="{{ url_for('.user_block') }}"
+                                    data-method="DELETE"
+                                    data-confirm="{% trans %}This user will regain access to Indico.
+                                    Are you sure you want to restore their access?{% endtrans %}"
+                                    data-reload-after>
+                                {% trans %}Unblock User{% endtrans %}
+                            </button>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="i-box-content">
+                <div id="personal-details-form-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        setupPersonalDataForm(
+            {{ (user.id if user != session.user else none) | tojson }},
+            {{ user_values | tojson }},
+            {{ current_affiliation | tojson }},
+            {{ titles | tojson }},
+            {{ user.synced_values | tojson }},
+            {{ locked_fields | tojson }},
+            {{ locked_field_message | tojson }},
+            {{ has_predefined_affiliations | tojson }}
+        );
+    </script>
+{% endblock %}

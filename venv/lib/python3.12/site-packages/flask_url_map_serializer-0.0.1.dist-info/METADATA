@@ -1,0 +1,22 @@
+Metadata-Version: 2.1
+Name: flask-url-map-serializer
+Version: 0.0.1
+Summary: Dumps the URL map of a flask app to a JSON file
+Home-page: https://github.com/indico/babel-plugin-flask-urls
+Author: Indico Team
+Author-email: indico-team@cern.ch
+License: MIT
+Platform: UNKNOWN
+Requires-Dist: click
+Requires-Dist: flask (>=0.11)
+
+This package adds a ``urls_to_json`` command to the ``flask``
+CLI that dumps the URL map of the flask app to a JSON file.
+
+It also provides the ``flask_url_map_serializer`` module containing
+the following functions which convert rules from the URL map to a
+JSON-serializable dict:
+
+- ``dump_url_rule(url_map, endpoint)``
+- ``dump_url_map(url_map)```
+

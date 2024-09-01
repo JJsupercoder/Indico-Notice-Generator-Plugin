@@ -1,0 +1,12 @@
+Dear John Doe,
+
+Jane Doe has posted a new comment on contribution #1 (Dummy Contribution):
+
+The review is passed
+
+You can view details on the following URL:
+http://localhost/timeline-url
+
+--
+Indico :: Email Notifier
+http://localhost/

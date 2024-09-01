@@ -1,0 +1,31 @@
+{% extends 'events/editing/emails/base_email.txt' %}
+
+{% set title = contribution.verbose_title %}
+{% set name = editor_name or _('Someone') %}
+
+{% block subject -%}
+    {% trans %}New editor judgment for contribution {{ title }}{% endtrans %}
+{%- endblock %}
+
+{% block body_text -%}
+{% if action == 'accept' -%}
+    {% if has_files %}
+        {% trans %}{{ name }} has changed and accepted an editable you are submitter of.{% endtrans %}
+    {% else %}
+        {% trans %}{{ name }} has accepted an editable you are submitter of.{% endtrans %}
+    {% endif %}
+{%- elif action == 'reject' -%}
+    {% trans %}{{ name }} has rejected an editable you are submitter of.{% endtrans %}
+{%- elif action == 'update' -%}
+    {% trans %}{{ name }} has made changes to an editable you are submitter of.{% endtrans %}
+{%- elif action == 'request_update' -%}
+    {% trans %}{{ name }} has requested changes to an editable you are submitter of.{% endtrans %}
+{%- endif %}
+{% trans %}Contribution: {{ title }}{% endtrans %}
+
+{%- if text %}
+
+{% trans %}{{ name }} also left a comment:{% endtrans %}
+{{ text }}
+{%- endif %}
+{%- endblock %}

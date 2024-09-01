@@ -1,0 +1,21 @@
+{% extends 'emails/base_i18n.txt' %}
+
+{% block subject -%}{% trans %}New Indico profile registered{% endtrans %}{%- endblock %}
+
+{% block header -%}{%- endblock %}
+
+{% block body -%}
+    {%- filter dedent -%}
+        {% trans %}A new Indico profile has been registered.{% endtrans %}
+
+        {% trans %}First name:{% endtrans %} {{ user.first_name }}
+        {% trans %}Last name:{% endtrans %} {{ user.last_name }}
+        {% trans %}Email address:{% endtrans %} {{ user.email }}
+        {%- if user.affiliation %}
+            {% trans %}Affiliation:{% endtrans %} {{ user.affiliation }}
+        {%- endif %}
+
+        {% trans %}User details:{% endtrans %}
+        {{ url_for('users.user_profile', user, _external=true) }}
+    {%- endfilter -%}
+{%- endblock %}

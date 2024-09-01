@@ -1,0 +1,11 @@
+Dear John Doe,
+
+Jane Doe has made changes to an editable you are submitter of.
+Contribution: #1 (Dummy Contribution)
+
+You can view details on the following URL:
+http://localhost/timeline-url
+
+--
+Indico :: Email Notifier
+http://localhost/

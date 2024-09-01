@@ -1,0 +1,75 @@
+div.inbody {
+  background: white;
+}
+div.inbody {
+  width: 95%;
+  margin-left: 2px;
+  margin-right: 3%;
+  position: relative;
+}
+div.inbody {
+  margin: 0 auto;
+}
+#div.inbody h1 {
+  text-align: center;
+  font-size: x-large;
+  margin-top: 0.5cm;
+}
+#div.inbody h5 {
+  color: #b89215;
+  font-variant: small-caps;
+  font-weight: bold;
+}
+div.inbody h5 {
+  font-variant: small-caps;
+  font-weight: bold;
+}
+
+div.inbody h2 {
+  text-align: center;
+  font-size: large;
+  margin-top: 0.5cm;
+  color: #741732;
+}
+
+div.inbody h5 {
+  text-align: right;
+  margin-top: 2cm;
+  margin-right: 34px;
+}
+div.inbody p {
+  margin-left: 15px;
+  margin-right: 4px;
+}
+
+div.inbody table {
+  width: 95%;
+  margin-left: 0.2em;
+  margin-right: 1em;
+  padding: 0;
+}
+div.inbody table.tab {
+  width: 100%;
+}
+div.inbody table.tab td {
+  margin: 0;
+  padding: 10px;
+}
+div.inbody table.tab th {
+  margin: left;
+  padding: 10px;
+}
+
+div.header {
+  text-align: center;
+  font-size: 0.8em;
+  color: #f9c878;
+}
+div.header h1 {
+  color: black;
+  font-size: 1.5em;
+}
+div.header p {
+  color: black;
+  font-size: 1.3em;
+}

@@ -1,0 +1,20 @@
+{% extends 'emails/base_i18n.txt' %}
+
+{% block subject -%}
+    {% trans %}Verify your email{% endtrans %}
+{%- endblock %}
+
+{% block header_recipient -%}
+    {% trans name=user.first_name %}Dear {{ name }},{% endtrans %}
+{%- endblock %}
+
+{% block body -%}
+{% filter wordwrap(width=72, break_long_words=false) %}
+    {%- trans mail=email -%}
+        You recently added the e-mail address {{ mail }} to your Indico account.
+        Please click the following link to confirm this action.
+    {%- endtrans %}
+{% endfilter %}
+
+{{ url_for('.user_emails_verify', token=token, _external=true) }}
+{%- endblock %}

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calendar of Events: Print to File</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('plugin_indico_pdf_generator.static', filename='indico_pdf_generator/css/aset.css') }}" />
+    <script>
+      function printDiv(divID) {
+        var divElements = document.getElementById(divID).innerHTML;
+        var oldPage = document.body.innerHTML;
+        document.body.innerHTML =
+          "<html><head><title></title></head><body>" + divElements + "</body>";
+        window.print();
+        document.body.innerHTML = oldPage;
+        attachListener();
+      }
+
+      function attachListener() {
+        const val = document.querySelector(".inbody");
+        const zoomin = document.querySelector(".btn.zoom-in");
+        const zoomout = document.querySelector(".btn.zoom-out");
+
+        function zoom_in() {
+          const fonsi = window
+            .getComputedStyle(val, null)
+            .getPropertyValue("font-size");
+          const currentSize = parseFloat(fonsi);
+          val.style.fontSize = currentSize + 1 + "px";
+        }
+
+        if (zoomin) {
+          zoomin.addEventListener("click", zoom_in);
+        }
+
+        function zoom_out() {
+          const fonsi = window
+            .getComputedStyle(val, null)
+            .getPropertyValue("font-size");
+          const currentSize = parseFloat(fonsi);
+          val.style.fontSize = currentSize - 1 + "px";
+        }
+
+        if (zoomout) {
+          zoomout.addEventListener("click", zoom_out);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", attachListener);
+    </script>
+  </head>
+  <body>
+    <div class="mainbody">
+    
+      <div class="titlebar">
+        <form method="post" action="/pdf-generator-plugin/event/{{event.id}}">
+          Select:&nbsp;
+          <select
+            id="viewSelect"
+            name="view"
+            onchange="this.form.submit()"
+            style="font-size: 8pt"
+          >
+            <option value="generic.html">Generic Notice Layout</option>
+            <option value="daa.html">DAA Notice Layout</option>
+            <option value="dbs.html">DBS Notice Layout</option>
+            <option value="dcs.html">DCS Notice Layout</option>
+            <option value="dcmp.html">DCMP Notice Layout</option>
+            <option value="dhep.html">DHEP Notice Layout</option>
+            <option value="dnap.html">DNAP Notice Layout</option>
+            <option value="dtp.html">DTP Notice Layout</option>
+            <option value="stcs.html">STCS Notice Layout</option>
+            <option value="wednesdaytalks.html">
+              Wednesday Colloquium Notice Layout
+            </option>
+            <option value="aset.html" selected>ASET Colloquium Notice Layout</option>
+            <option value="testDAA.html">Demo Notice Layout</option>
+          </select>
+
+          | Layout View: ASET &nbsp; |
+          <input
+            type="button"
+            value="Print Notice"
+            onclick="javascript:printDiv('printablediv')"
+          />
+          <button type="button" class="btn zoom-in">Increase Size</button>
+          <button type="button" class="btn zoom-out">Decrease Size</button>
+          <br /><br />
+        </form>
+      </div>
+     
+      <div id="printablediv">
+        <div class="inbody">
+            <div class="header">
+                <h1>TATA INSTITUTE OF FUNDAMENTAL RESEARCH</h1>
+                <h2>Homi Bhabha Road, Mumbai-400 005</h2>
+                <h5>October 17, 2023</h5>
+                <br>
+                <h1>ASET Colloquium</h1>
+            </div>
+            <table class="tab">
+                <tr>
+                    <td nowrap valign="top"><b>Speaker
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            :</b></td>
+                    <td valign="top"><b>&nbsp;{{speaker}}&nbsp;&nbsp;<i>{{speaker_designation}}</i></b></td>
+                </tr>
+                <tr>
+                    <td nowrap valign="top"><b>Title
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            :</b></td>
+                    <td valign="top"><b>{{title}}</title></b></td>
+                </tr>
+                <tr>
+                    <b><td nowrap valign="top">Date &amp;Time
+                            &nbsp;&nbsp;
+                            :</td>
+                        <td valign="top"><span>{{date}}</span> at <span class="bold">{{time}}</span> hrs.
+                        </td>
+                    </b>
+                </tr>
+                <tr>
+                    <td nowrap><b>Venue
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</b></td>
+                    <td><b>&nbsp;{{venue}} </b></td>
+                </tr>
+            </table>
+            <p><b><u>Abstract</u></b>&nbsp;:</p>
+            <p class="pre">{{abstract}}</p>
+            <h5><img src="{{ url_for('plugin_indico_pdf_generator.static', filename='indico_pdf_generator/img/aset.png') }}" width="100" height="50"></h5>
+            <h5>Dr. Satyanarayana Bheesette</h5>
+            <h5>(Coordinator, ASET Forum)</h5>
+        </div>
+    </div>
+    <br />
+    </body>
+    
+    </html>
+    

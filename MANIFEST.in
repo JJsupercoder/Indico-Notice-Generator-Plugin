@@ -1,0 +1,3 @@
+recursive-include indico_pdf_generator/templates *
+recursive-include indico_pdf_generator/static *
+recursive-include indico_pdf_generator/templates *.html

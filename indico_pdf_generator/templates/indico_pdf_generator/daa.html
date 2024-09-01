@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calendar of Events: Print to File</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('plugin_indico_pdf_generator.static', filename='indico_pdf_generator/css/daa.css') }}" />
+    <script>
+      function printDiv(divID) {
+        var divElements = document.getElementById(divID).innerHTML;
+        var oldPage = document.body.innerHTML;
+        document.body.innerHTML =
+          "<html><head><title></title></head><body>" + divElements + "</body>";
+        window.print();
+        document.body.innerHTML = oldPage;
+        attachListener();
+      }
+
+      function attachListener() {
+        const val = document.querySelector(".inbody");
+        const zoomin = document.querySelector(".btn.zoom-in");
+        const zoomout = document.querySelector(".btn.zoom-out");
+
+        function zoom_in() {
+          const fonsi = window
+            .getComputedStyle(val, null)
+            .getPropertyValue("font-size");
+          const currentSize = parseFloat(fonsi);
+          val.style.fontSize = currentSize + 1 + "px";
+        }
+
+        if (zoomin) {
+          zoomin.addEventListener("click", zoom_in);
+        }
+
+        function zoom_out() {
+          const fonsi = window
+            .getComputedStyle(val, null)
+            .getPropertyValue("font-size");
+          const currentSize = parseFloat(fonsi);
+          val.style.fontSize = currentSize - 1 + "px";
+        }
+
+        if (zoomout) {
+          zoomout.addEventListener("click", zoom_out);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", attachListener);
+    </script>
+  </head>
+  <body>
+    <div class="mainbody">
+      <form method="post" action="/pdf-generator-plugin/event/{{event.id}}">
+        Select:&nbsp;
+        <select
+          id="viewSelect"
+          name="view"
+          onchange="this.form.submit()"
+          style="font-size: 8pt"
+        >
+          <option value="generic.html">Generic Notice Layout</option>
+          <option value="daa.html" selected>DAA Notice Layout</option>
+          <option value="dbs.html">DBS Notice Layout</option>
+          <option value="dcs.html">DCS Notice Layout</option>
+          <option value="dcmp.html">DCMP Notice Layout</option>
+          <option value="dhep.html">DHEP Notice Layout</option>
+          <option value="dnap.html">DNAP Notice Layout</option>
+          <option value="dtp.html">DTP Notice Layout</option>
+          <option value="stcs.html">STCS Notice Layout</option>
+          <option value="wednesdaytalks.html">
+            Wednesday Colloquium Notice Layout
+          </option>
+          <option value="aset.html">ASET Colloquium Notice Layout</option>
+          <option value="testDAA.html">Demo Notice Layout</option>
+        </select>
+
+        | Layout View: DAA &nbsp;|
+        <input
+          type="button"
+          value="Print Notice"
+          onclick="printDiv('printablediv')"
+        />
+        <button type="button" class="btn zoom-in">Increase Size</button>
+        <button type="button" class="btn zoom-out">Decrease Size</button>
+        <br />
+        <br />
+      </form>
+
+      <div id="printablediv">
+        <div class="inbody">
+          <div class="header">
+            <h1 style="font-size: 2.2em">
+              Tata Institute Of Fundamental Research
+            </h1>
+            <h1 style="font-size: 2.6em; color: darkblue">
+              <i>Department of Astronomy &amp; Astrophysics</i>
+            </h1>
+            &nbsp;
+            <h1 class="ex2">Seminar</h1>
+          </div>
+          <table class="tab">
+            <tbody>
+              <tr>
+                <td nowrap="" valign="top">
+                  Speaker
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                </td>
+                <td valign="top">
+                  &nbsp;{{speaker}}<br /><i>{{speaker_designation}}</i>
+                </td>
+              </tr>
+              <tr>
+                <td nowrap="" valign="top">
+                  Title
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  :
+                </td>
+                <td valign="top">{{title}}</td>
+              </tr>
+              <tr>
+                <td nowrap="" valign="top">Date &amp;Time &nbsp;&nbsp; :</td>
+                <td valign="top">
+                  <span>{{date}}</span> at
+                  <span class="bold">{{time}}</span> hrs.
+                </td>
+              </tr>
+              <tr>
+                <td nowrap="">
+                  Venue
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                </td>
+                <td>{{venue}}<br /></td>
+              </tr>
+            </tbody>
+          </table>
+          <br />
+          <h2 class="ex3">Abstract</h2>
+          <p class="pre">{{abstract}}</p>
+          <h5 class="ex1">(DAA Seminar Coordinator)</h5>
+        </div>
+      </div>
+
+      <br />
+    </div>
+  </body>
+</html>

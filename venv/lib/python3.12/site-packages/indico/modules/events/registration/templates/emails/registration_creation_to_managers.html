@@ -1,0 +1,52 @@
+{% extends 'events/registration/emails/base_registration_details.html' %}
+
+{% block subject_message -%}
+    {% if registration.state.name == 'pending' -%}
+        {% trans title=event.title %}New pending registration for {{ title }}{% endtrans %}
+    {%- else -%}
+        {% trans title=event.title %}New registration for {{ title }}{% endtrans %}
+    {%- endif %}
+{%- endblock %}
+
+{% block registration_header -%}
+    <p>{% trans %}Dear organizer,{% endtrans %}</p>
+    <p>
+        {% block registration_header_text %}
+            {% trans title=event.title, name=registration.full_name, strong='<strong>'|safe, endstrong='</strong>'|safe -%}
+                There is a new registration for the event {{ strong }}{{ title }}{{ endstrong }} under {{ strong }}{{ name }}{{ endstrong }}.
+            {% endtrans %}
+            {{ render_text_pending() }}
+            {{ render_text_manage() }}
+        {% endblock %}
+    </p>
+{%- endblock %}
+
+{% block registration_footer %}
+    <p>
+        {% trans %}To manage this registration form follow this link:{% endtrans %}
+        <a href="{{ url_for('event_registration.manage_regform', registration.registration_form, _external=true) }}">
+            {% trans %}Manage registration form{% endtrans %}
+        </a>
+    </p>
+{% endblock %}
+
+
+{% macro render_rejection_reason() %}
+    {% if registration.state.name == 'rejected' and registration.rejection_reason %}
+        <br>{% trans %}Rejection reason:{% endtrans %} {{ registration.rejection_reason }}<br>
+    {% endif %}
+{% endmacro %}
+
+
+{% macro render_text_pending() %}
+    {% if registration.state.name == 'pending' %}
+        {% trans %}Please note that it's waiting for manual approval by a manager.{% endtrans %}
+    {% endif %}
+{% endmacro %}
+
+
+{% macro render_text_manage() %}
+    {% trans link='<a href="%s">'|format(registration.external_registration_details_url)|safe, endlink='</a>'|safe -%}
+        You can manage this registration {{ link }}here{{ endlink }}.
+    {%- endtrans %}
+{% endmacro %}

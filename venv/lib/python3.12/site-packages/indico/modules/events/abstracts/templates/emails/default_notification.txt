@@ -1,0 +1,11 @@
+{% macro get_subject() -%}
+    {%- block subject %}{% endblock -%}
+{%- endmacro %}
+
+{% macro get_body() -%}
+    {%- filter dedent -%}
+        {% trans %}Dear {submitter_name},{% endtrans %}
+
+        {% block body %}{% endblock %}
+    {%- endfilter -%}
+{%- endmacro %}

@@ -1,0 +1,9 @@
+{% extends 'emails/base_i18n.txt' %}
+
+{% block body %}{% endblock %}
+
+{% block footer_title -%}
+    {% trans %}Room Booking{% endtrans %}
+{%- endblock %}
+
+{% block footer_url %}{{ url_for('rb.roombooking', _external=true) }}{% endblock %}

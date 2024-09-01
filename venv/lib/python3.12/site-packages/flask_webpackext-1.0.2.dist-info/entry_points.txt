@@ -1,0 +1,3 @@
+[flask.commands]
+webpack = flask_webpackext.cli:webpack
+

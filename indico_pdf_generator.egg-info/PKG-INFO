@@ -1,0 +1,6 @@
+Metadata-Version: 2.1
+Name: indico-pdf-generator
+Version: 0.1
+Platform: any
+Requires-Dist: indico>=2.0.dev0
+Requires-Dist: Flask

@@ -1,0 +1,35 @@
+{% extends 'emails/base_i18n.txt' %}
+{% set state = 'accepted' if agreement.accepted else 'rejected' %}
+
+{% block subject -%}
+    {%- if state == 'accepted' -%}
+        {% trans %}Agreement accepted{% endtrans %}
+    {%- else -%}
+        {% trans %}Agreement rejected{% endtrans %}
+    {%- endif -%}
+{%- endblock %}
+{% block footer_title %}{% trans %}Agreements{% endtrans %}{% endblock %}
+
+{% block header_recipient -%}
+    {% trans %}Dear event managers,{% endtrans %}
+{%- endblock %}
+
+{% block body -%}
+    {%- if state == 'accepted' -%}
+        {% trans %}A new agreement has been accepted for the event:{% endtrans %}
+    {%- else -%}
+        {% trans %}A new agreement has been rejected for the event:{% endtrans %}
+    {%- endif %}
+{{ agreement.event.title }}
+
+{% filter underline %}{% trans %}Person Info{% endtrans %}{% endfilter %}
+{% trans %}Name:{% endtrans %}  {{ agreement.person_name }}
+{% trans %}Email:{% endtrans %} {{ agreement.person_email }}
+
+{%- if agreement.reason %}
+
+{% filter underline %}{% trans %}Reason{% endtrans %}{% endfilter %}
+{{ agreement.reason }}
+{%- endif %}
+
+{%- endblock %}

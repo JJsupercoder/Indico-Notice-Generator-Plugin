@@ -1,0 +1,741 @@
+/* required styles */
+
+.leaflet-pane,
+.leaflet-tile,
+.leaflet-marker-icon,
+.leaflet-marker-shadow,
+.leaflet-tile-container,
+.leaflet-pane > svg,
+.leaflet-pane > canvas,
+.leaflet-zoom-box,
+.leaflet-image-layer,
+.leaflet-layer {
+	position: absolute;
+	left: 0;
+	top: 0;
+	}
+.leaflet-container {
+	overflow: hidden;
+	}
+.leaflet-tile,
+.leaflet-marker-icon,
+.leaflet-marker-shadow {
+	-webkit-user-select: none;
+	   -moz-user-select: none;
+	        user-select: none;
+	  -webkit-user-drag: none;
+	}
+/* Prevents IE11 from highlighting tiles in blue */
+.leaflet-tile::selection {
+	background: transparent;
+}
+/* Safari renders non-retina tile on retina better with this, but Chrome is worse */
+.leaflet-safari .leaflet-tile {
+	image-rendering: -webkit-optimize-contrast;
+	}
+/* hack that prevents hw layers "stretching" when loading new tiles */
+.leaflet-safari .leaflet-tile-container {
+	width: 1600px;
+	height: 1600px;
+	-webkit-transform-origin: 0 0;
+	}
+.leaflet-marker-icon,
+.leaflet-marker-shadow {
+	display: block;
+	}
+/* .leaflet-container svg: reset svg max-width decleration shipped in Joomla! (joomla.org) 3.x */
+/* .leaflet-container img: map is broken in FF if you have max-width: 100% on tiles */
+.leaflet-container .leaflet-overlay-pane svg {
+	max-width: none !important;
+	max-height: none !important;
+	}
+.leaflet-container .leaflet-marker-pane img,
+.leaflet-container .leaflet-shadow-pane img,
+.leaflet-container .leaflet-tile-pane img,
+.leaflet-container img.leaflet-image-layer,
+.leaflet-container .leaflet-tile {
+	max-width: none !important;
+	max-height: none !important;
+	width: auto;
+	padding: 0;
+	}
+
+.leaflet-container img.leaflet-tile {
+	/* See: https://bugs.chromium.org/p/chromium/issues/detail?id=600120 */
+	mix-blend-mode: plus-lighter;
+}
+
+.leaflet-container.leaflet-touch-zoom {
+	-ms-touch-action: pan-x pan-y;
+	touch-action: pan-x pan-y;
+	}
+.leaflet-container.leaflet-touch-drag {
+	-ms-touch-action: pinch-zoom;
+	/* Fallback for FF which doesn't support pinch-zoom */
+	touch-action: none;
+	touch-action: pinch-zoom;
+}
+.leaflet-container.leaflet-touch-drag.leaflet-touch-zoom {
+	-ms-touch-action: none;
+	touch-action: none;
+}
+.leaflet-container {
+	-webkit-tap-highlight-color: transparent;
+}
+.leaflet-container a {
+	-webkit-tap-highlight-color: rgba(51, 181, 229, 0.4);
+}
+.leaflet-tile {
+	filter: inherit;
+	visibility: hidden;
+	}
+.leaflet-tile-loaded {
+	visibility: inherit;
+	}
+.leaflet-zoom-box {
+	width: 0;
+	height: 0;
+	-moz-box-sizing: border-box;
+	     box-sizing: border-box;
+	z-index: 800;
+	}
+/* workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=888319 */
+.leaflet-overlay-pane svg {
+	-moz-user-select: none;
+	}
+
+.leaflet-pane         { z-index: 400; }
+
+.leaflet-tile-pane    { z-index: 200; }
+.leaflet-overlay-pane { z-index: 400; }
+.leaflet-shadow-pane  { z-index: 500; }
+.leaflet-marker-pane  { z-index: 600; }
+.leaflet-tooltip-pane   { z-index: 650; }
+.leaflet-popup-pane   { z-index: 700; }
+
+.leaflet-map-pane canvas { z-index: 100; }
+.leaflet-map-pane svg    { z-index: 200; }
+
+.leaflet-vml-shape {
+	width: 1px;
+	height: 1px;
+	}
+.lvml {
+	behavior: url(#default#VML);
+	display: inline-block;
+	position: absolute;
+	}
+
+
+/* control positioning */
+
+.leaflet-control {
+	position: relative;
+	z-index: 800;
+	pointer-events: visiblePainted; /* IE 9-10 doesn't have auto */
+	pointer-events: auto;
+	}
+.leaflet-top,
+.leaflet-bottom {
+	position: absolute;
+	z-index: 1000;
+	pointer-events: none;
+	}
+.leaflet-top {
+	top: 0;
+	}
+.leaflet-right {
+	right: 0;
+	}
+.leaflet-bottom {
+	bottom: 0;
+	}
+.leaflet-left {
+	left: 0;
+	}
+.leaflet-control {
+	float: left;
+	clear: both;
+	}
+.leaflet-right .leaflet-control {
+	float: right;
+	}
+.leaflet-top .leaflet-control {
+	margin-top: 10px;
+	}
+.leaflet-bottom .leaflet-control {
+	margin-bottom: 10px;
+	}
+.leaflet-left .leaflet-control {
+	margin-left: 10px;
+	}
+.leaflet-right .leaflet-control {
+	margin-right: 10px;
+	}
+
+
+/* zoom and fade animations */
+
+.leaflet-fade-anim .leaflet-popup {
+	opacity: 0;
+	-webkit-transition: opacity 0.2s linear;
+	   -moz-transition: opacity 0.2s linear;
+	        transition: opacity 0.2s linear;
+	}
+.leaflet-fade-anim .leaflet-map-pane .leaflet-popup {
+	opacity: 1;
+	}
+.leaflet-zoom-animated {
+	-webkit-transform-origin: 0 0;
+	    -ms-transform-origin: 0 0;
+	        transform-origin: 0 0;
+	}
+svg.leaflet-zoom-animated {
+	will-change: transform;
+}
+
+.leaflet-zoom-anim .leaflet-zoom-animated {
+	-webkit-transition: -webkit-transform 0.25s cubic-bezier(0,0,0.25,1);
+	   -moz-transition:    -moz-transform 0.25s cubic-bezier(0,0,0.25,1);
+	        transition:         transform 0.25s cubic-bezier(0,0,0.25,1);
+	}
+.leaflet-zoom-anim .leaflet-tile,
+.leaflet-pan-anim .leaflet-tile {
+	-webkit-transition: none;
+	   -moz-transition: none;
+	        transition: none;
+	}
+
+.leaflet-zoom-anim .leaflet-zoom-hide {
+	visibility: hidden;
+	}
+
+
+/* cursors */
+
+.leaflet-interactive {
+	cursor: pointer;
+	}
+.leaflet-grab {
+	cursor: -webkit-grab;
+	cursor:    -moz-grab;
+	cursor:         grab;
+	}
+.leaflet-crosshair,
+.leaflet-crosshair .leaflet-interactive {
+	cursor: crosshair;
+	}
+.leaflet-popup-pane,
+.leaflet-control {
+	cursor: auto;
+	}
+.leaflet-dragging .leaflet-grab,
+.leaflet-dragging .leaflet-grab .leaflet-interactive,
+.leaflet-dragging .leaflet-marker-draggable {
+	cursor: move;
+	cursor: -webkit-grabbing;
+	cursor:    -moz-grabbing;
+	cursor:         grabbing;
+	}
+
+/* marker & overlays interactivity */
+.leaflet-marker-icon,
+.leaflet-marker-shadow,
+.leaflet-image-layer,
+.leaflet-pane > svg path,
+.leaflet-tile-container {
+	pointer-events: none;
+	}
+
+.leaflet-marker-icon.leaflet-interactive,
+.leaflet-image-layer.leaflet-interactive,
+.leaflet-pane > svg path.leaflet-interactive,
+svg.leaflet-image-layer.leaflet-interactive path {
+	pointer-events: visiblePainted; /* IE 9-10 doesn't have auto */
+	pointer-events: auto;
+	}
+
+/* visual tweaks */
+
+.leaflet-container {
+	background: #ddd;
+	outline-offset: 1px;
+	}
+.leaflet-container a {
+	color: #0078A8;
+	}
+.leaflet-zoom-box {
+	border: 2px dotted #38f;
+	background: rgba(255,255,255,0.5);
+	}
+
+
+/* general typography */
+.leaflet-container {
+	font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-size: 0.75rem;
+	line-height: 1.5;
+	}
+
+
+/* general toolbar styles */
+
+.leaflet-bar {
+	box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+	border-radius: 4px;
+	}
+.leaflet-bar a {
+	background-color: #fff;
+	border-bottom: 1px solid #ccc;
+	width: 26px;
+	height: 26px;
+	line-height: 26px;
+	display: block;
+	text-align: center;
+	text-decoration: none;
+	color: black;
+	}
+.leaflet-bar a,
+.leaflet-control-layers-toggle {
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	display: block;
+	}
+.leaflet-bar a:hover,
+.leaflet-bar a:focus {
+	background-color: #f4f4f4;
+	}
+.leaflet-bar a:first-child {
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	}
+.leaflet-bar a:last-child {
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+	border-bottom: none;
+	}
+.leaflet-bar a.leaflet-disabled {
+	cursor: default;
+	background-color: #f4f4f4;
+	color: #bbb;
+	}
+
+.leaflet-touch .leaflet-bar a {
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	}
+.leaflet-touch .leaflet-bar a:first-child {
+	border-top-left-radius: 2px;
+	border-top-right-radius: 2px;
+	}
+.leaflet-touch .leaflet-bar a:last-child {
+	border-bottom-left-radius: 2px;
+	border-bottom-right-radius: 2px;
+	}
+
+/* zoom control */
+
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+	font: bold 18px 'Lucida Console', Monaco, monospace;
+	text-indent: 1px;
+	}
+
+.leaflet-touch .leaflet-control-zoom-in, .leaflet-touch .leaflet-control-zoom-out  {
+	font-size: 22px;
+	}
+
+
+/* layers control */
+
+.leaflet-control-layers {
+	box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+	background: #fff;
+	border-radius: 5px;
+	}
+.leaflet-control-layers-toggle {
+	background-image: url(/dist/mod_assets/_/_/_/node_modules/leaflet/dist/images/layers.a6137456.png);
+	width: 36px;
+	height: 36px;
+	}
+.leaflet-retina .leaflet-control-layers-toggle {
+	background-image: url(/dist/mod_assets/_/_/_/node_modules/leaflet/dist/images/layers-2x.4f0283c6.png);
+	background-size: 26px 26px;
+	}
+.leaflet-touch .leaflet-control-layers-toggle {
+	width: 44px;
+	height: 44px;
+	}
+.leaflet-control-layers .leaflet-control-layers-list,
+.leaflet-control-layers-expanded .leaflet-control-layers-toggle {
+	display: none;
+	}
+.leaflet-control-layers-expanded .leaflet-control-layers-list {
+	display: block;
+	position: relative;
+	}
+.leaflet-control-layers-expanded {
+	padding: 6px 10px 6px 6px;
+	color: #333;
+	background: #fff;
+	}
+.leaflet-control-layers-scrollbar {
+	overflow-y: scroll;
+	overflow-x: hidden;
+	padding-right: 5px;
+	}
+.leaflet-control-layers-selector {
+	margin-top: 2px;
+	position: relative;
+	top: 1px;
+	}
+.leaflet-control-layers label {
+	display: block;
+	font-size: 13px;
+	font-size: 1.08333em;
+	}
+.leaflet-control-layers-separator {
+	height: 0;
+	border-top: 1px solid #ddd;
+	margin: 5px -10px 5px -6px;
+	}
+
+/* Default icon URLs */
+.leaflet-default-icon-path { /* used only in path-guessing heuristic, see L.Icon.Default */
+	background-image: url(/dist/mod_assets/_/_/_/node_modules/leaflet/dist/images/marker-icon.2273e3d8.png);
+	}
+
+
+/* attribution and scale controls */
+
+.leaflet-container .leaflet-control-attribution {
+	background: #fff;
+	background: rgba(255, 255, 255, 0.8);
+	margin: 0;
+	}
+.leaflet-control-attribution,
+.leaflet-control-scale-line {
+	padding: 0 5px;
+	color: #333;
+	line-height: 1.4;
+	}
+.leaflet-control-attribution a {
+	text-decoration: none;
+	}
+.leaflet-control-attribution a:hover,
+.leaflet-control-attribution a:focus {
+	text-decoration: underline;
+	}
+.leaflet-attribution-flag {
+	display: inline !important;
+	vertical-align: baseline !important;
+	width: 1em;
+	height: 0.6669em;
+	}
+.leaflet-left .leaflet-control-scale {
+	margin-left: 5px;
+	}
+.leaflet-bottom .leaflet-control-scale {
+	margin-bottom: 5px;
+	}
+.leaflet-control-scale-line {
+	border: 2px solid #777;
+	border-top: none;
+	line-height: 1.1;
+	padding: 2px 5px 1px;
+	white-space: nowrap;
+	-moz-box-sizing: border-box;
+	     box-sizing: border-box;
+	background: rgba(255, 255, 255, 0.8);
+	text-shadow: 1px 1px #fff;
+	}
+.leaflet-control-scale-line:not(:first-child) {
+	border-top: 2px solid #777;
+	border-bottom: none;
+	margin-top: -2px;
+	}
+.leaflet-control-scale-line:not(:first-child):not(:last-child) {
+	border-bottom: 2px solid #777;
+	}
+
+.leaflet-touch .leaflet-control-attribution,
+.leaflet-touch .leaflet-control-layers,
+.leaflet-touch .leaflet-bar {
+	box-shadow: none;
+	}
+.leaflet-touch .leaflet-control-layers,
+.leaflet-touch .leaflet-bar {
+	border: 2px solid rgba(0,0,0,0.2);
+	background-clip: padding-box;
+	}
+
+
+/* popup */
+
+.leaflet-popup {
+	position: absolute;
+	text-align: center;
+	margin-bottom: 20px;
+	}
+.leaflet-popup-content-wrapper {
+	padding: 1px;
+	text-align: left;
+	border-radius: 12px;
+	}
+.leaflet-popup-content {
+	margin: 13px 24px 13px 20px;
+	line-height: 1.3;
+	font-size: 13px;
+	font-size: 1.08333em;
+	min-height: 1px;
+	}
+.leaflet-popup-content p {
+	margin: 17px 0;
+	margin: 1.3em 0;
+	}
+.leaflet-popup-tip-container {
+	width: 40px;
+	height: 20px;
+	position: absolute;
+	left: 50%;
+	margin-top: -1px;
+	margin-left: -20px;
+	overflow: hidden;
+	pointer-events: none;
+	}
+.leaflet-popup-tip {
+	width: 17px;
+	height: 17px;
+	padding: 1px;
+
+	margin: -10px auto 0;
+	pointer-events: auto;
+
+	-webkit-transform: rotate(45deg);
+	   -moz-transform: rotate(45deg);
+	    -ms-transform: rotate(45deg);
+	        transform: rotate(45deg);
+	}
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+	background: white;
+	color: #333;
+	box-shadow: 0 3px 14px rgba(0,0,0,0.4);
+	}
+.leaflet-container a.leaflet-popup-close-button {
+	position: absolute;
+	top: 0;
+	right: 0;
+	border: none;
+	text-align: center;
+	width: 24px;
+	height: 24px;
+	font: 16px/24px Tahoma, Verdana, sans-serif;
+	color: #757575;
+	text-decoration: none;
+	background: transparent;
+	}
+.leaflet-container a.leaflet-popup-close-button:hover,
+.leaflet-container a.leaflet-popup-close-button:focus {
+	color: #585858;
+	}
+.leaflet-popup-scrolled {
+	overflow: auto;
+	}
+
+.leaflet-oldie .leaflet-popup-content-wrapper {
+	-ms-zoom: 1;
+	}
+.leaflet-oldie .leaflet-popup-tip {
+	width: 24px;
+	margin: 0 auto;
+
+	-ms-filter: "progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678)";
+	filter: progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678);
+	}
+
+.leaflet-oldie .leaflet-control-zoom,
+.leaflet-oldie .leaflet-control-layers,
+.leaflet-oldie .leaflet-popup-content-wrapper,
+.leaflet-oldie .leaflet-popup-tip {
+	border: 1px solid #999;
+	}
+
+
+/* div icon */
+
+.leaflet-div-icon {
+	background: #fff;
+	border: 1px solid #666;
+	}
+
+
+/* Tooltip */
+/* Base styles for the element that has a tooltip */
+.leaflet-tooltip {
+	position: absolute;
+	padding: 6px;
+	background-color: #fff;
+	border: 1px solid #fff;
+	border-radius: 3px;
+	color: #222;
+	white-space: nowrap;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	pointer-events: none;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+	}
+.leaflet-tooltip.leaflet-interactive {
+	cursor: pointer;
+	pointer-events: auto;
+	}
+.leaflet-tooltip-top:before,
+.leaflet-tooltip-bottom:before,
+.leaflet-tooltip-left:before,
+.leaflet-tooltip-right:before {
+	position: absolute;
+	pointer-events: none;
+	border: 6px solid transparent;
+	background: transparent;
+	content: "";
+	}
+
+/* Directions */
+
+.leaflet-tooltip-bottom {
+	margin-top: 6px;
+}
+.leaflet-tooltip-top {
+	margin-top: -6px;
+}
+.leaflet-tooltip-bottom:before,
+.leaflet-tooltip-top:before {
+	left: 50%;
+	margin-left: -6px;
+	}
+.leaflet-tooltip-top:before {
+	bottom: 0;
+	margin-bottom: -12px;
+	border-top-color: #fff;
+	}
+.leaflet-tooltip-bottom:before {
+	top: 0;
+	margin-top: -12px;
+	margin-left: -6px;
+	border-bottom-color: #fff;
+	}
+.leaflet-tooltip-left {
+	margin-left: -6px;
+}
+.leaflet-tooltip-right {
+	margin-left: 6px;
+}
+.leaflet-tooltip-left:before,
+.leaflet-tooltip-right:before {
+	top: 50%;
+	margin-top: -6px;
+	}
+.leaflet-tooltip-left:before {
+	right: 0;
+	margin-right: -12px;
+	border-left-color: #fff;
+	}
+.leaflet-tooltip-right:before {
+	left: 0;
+	margin-left: -12px;
+	border-right-color: #fff;
+	}
+
+/* Printing */
+
+@media print {
+	/* Prevent printers from removing background-images of controls. */
+	.leaflet-control {
+		-webkit-print-color-adjust: exact;
+		print-color-adjust: exact;
+		}
+	}
+
+.rb-client-js-common-map-___RoomBookingMap-module__map-container___qylSi .leaflet-container{height:calc(100vh - (50px + 75px + var(--extra-bars, 0)*50px) - 40px);font-size:14px}.rb-client-js-common-map-___RoomBookingMap-module__map-container___qylSi .leaflet-control{font-family:"Muli","Helvetica Neue","Arial","Helvetica",sans-serif;border:none;box-shadow:.1em .1em .25em #999;height:100%}.rb-client-js-common-map-___RoomBookingMap-module__map-container___qylSi .leaflet-top.leaflet-left{display:flex}.rb-client-js-common-map-___RoomBookingMap-module__map-container___qylSi .marker-cluster,.rb-client-js-common-map-___RoomBookingMap-module__map-container___qylSi .rb-map-marker{border-radius:50%}.rb-client-js-common-map-___RoomBookingMap-module__map-container___qylSi .rb-map-cluster{background-color:rgba(125,207,182,.8);border:2px solid #58c1a1;color:#f9f9f9;height:50px;width:50px;line-height:37px;text-align:center;font-weight:bold;font-size:1.1em;font-family:"Muli","Helvetica Neue","Arial","Helvetica",sans-serif;text-shadow:1px 1px #777}.rb-client-js-common-map-___RoomBookingMap-module__map-container___qylSi .rb-map-cluster.highlight{background-color:rgba(255,136,0,.9);border:2px solid #cc6d00}.rb-client-js-common-map-___RoomBookingMap-module__map-container___qylSi .rb-map-marker{background-color:rgba(98,234,192,.9);border:2px solid #3ea888}.rb-client-js-common-map-___RoomBookingMap-module__map-container___qylSi .rb-map-marker.highlight{background-color:rgba(255,136,0,.9);border:2px solid #cc6d00}.rb-client-js-common-map-___RoomBookingMap-module__map-container___qylSi .search-control{opacity:0;transition:opacity .5s ease-in}.rb-client-js-common-map-___RoomBookingMap-module__map-container___qylSi .search-control.visible{opacity:1}
+.rb-client-js-common-map-___MapController-module__map-dimmer___lWOw9.ui.dimmer{height:calc(100vh - (50px + 75px + var(--extra-bars, 0)*50px) - 0px)}.rb-client-js-common-map-___MapController-module__areas-dropdown___X47\+n.dropdown{min-width:10em}.rb-client-js-common-map-___MapController-module__areas-dropdown___X47\+n.dropdown .menu .item{font-size:1em}.rb-client-js-common-map-___MapController-module__map-control-content___ZgCKy{background-color:#fff;padding:.5em;border-radius:.25em;font-size:.85em}.rb-client-js-common-map-___MapController-module__show-all-button___pxyNe.ui.button{background-color:#fff;margin:0}.rb-client-js-common-map-___MapController-module__map-context___oBBW5{height:100%}
+.rb-client-js-components-___TimeRangePicker-module__time-range-picker___RLBw6{display:flex;justify-content:space-between;width:200px}.rb-client-js-components-___TimeRangePicker-module__time-range-picker___RLBw6 .rb-client-js-components-___TimeRangePicker-module__start-time-dropdown___WUKry{max-width:100px !important;min-width:90px !important;text-align:center !important}.rb-client-js-components-___TimeRangePicker-module__time-range-picker___RLBw6 .rb-client-js-components-___TimeRangePicker-module__end-time-dropdown___0c5\+2{max-width:100px !important;min-width:90px !important;text-align:center !important}.rb-client-js-components-___TimeRangePicker-module__time-range-picker___RLBw6 .rb-client-js-components-___TimeRangePicker-module__end-time-dropdown___0c5\+2 .menu{min-width:140px !important}.rb-client-js-components-___TimeRangePicker-module__time-range-picker___RLBw6 .rb-client-js-components-___TimeRangePicker-module__duration___NpHjo{font-size:.7em;color:#808c99;white-space:nowrap}.rb-client-js-components-___TimeRangePicker-module__time-range-picker___RLBw6 .rb-client-js-components-___TimeRangePicker-module__end-time-item___CcoUx{white-space:nowrap}
+.rb-client-js-common-rooms-edit-___DailyAvailability-module__availability-container___6iBnu{display:flex;align-items:center;padding-bottom:5px}
+.rb-client-js-common-rooms-edit-___EquipmentList-module__equipment-button___u8Mba{cursor:pointer;color:#f91f1f;opacity:.5 !important}.rb-client-js-common-rooms-edit-___EquipmentList-module__equipment-button___u8Mba:hover{opacity:1 !important}
+.rb-client-js-common-rooms-edit-___RoomPhoto-module__dropzone___gQEEE{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px;border-width:2px;border-radius:2px;border-color:#dfdfdf;border-style:dashed;background-color:#f9f9f9;color:#bbb;outline:none;transition:border .24s ease-in-out}.rb-client-js-common-rooms-edit-___RoomPhoto-module__photo-actions___fbT9K{display:flex;justify-content:flex-end;width:100%;padding-top:10px}.rb-client-js-common-rooms-edit-___RoomPhoto-module__photo-actions___fbT9K .rb-client-js-common-rooms-edit-___RoomPhoto-module__upload-icon___GVnrw{background-color:#00a4e4 !important;color:#fff !important}.rb-client-js-common-rooms-edit-___RoomPhoto-module__photo-actions___fbT9K .rb-client-js-common-rooms-edit-___RoomPhoto-module__upload-icon___GVnrw:hover{background-color:#007cac !important}.rb-client-js-common-rooms-edit-___RoomPhoto-module__photo-actions___fbT9K .rb-client-js-common-rooms-edit-___RoomPhoto-module__remove-icon___6fFCf{background-color:#f91f1f !important;color:#fff !important}.rb-client-js-common-rooms-edit-___RoomPhoto-module__photo-actions___fbT9K .rb-client-js-common-rooms-edit-___RoomPhoto-module__remove-icon___6fFCf:hover{background-color:#c00 !important}.rb-client-js-common-rooms-edit-___RoomPhoto-module__photo-actions___fbT9K .rb-client-js-common-rooms-edit-___RoomPhoto-module__save-icon___fGY5q{background-color:#00c851 !important;color:#fff !important}.rb-client-js-common-rooms-edit-___RoomPhoto-module__photo-actions___fbT9K .rb-client-js-common-rooms-edit-___RoomPhoto-module__save-icon___fGY5q:hover{background-color:#67a766 !important}
+.rb-client-js-common-rooms-edit-___RoomEditModal-module__button-header___6Wsxd{display:flex;justify-content:space-between;align-items:center;padding-bottom:10px}.rb-client-js-common-rooms-edit-___RoomEditModal-module__submit-message___MMgjk{margin:0 0 1em !important}.rb-client-js-common-rooms-edit-___RoomEditModal-module__room-form___TtsNI .fields>.field{flex-grow:1 !important}
+.rb-client-js-components-___DimmableImage-module__dimmable-image___c3hS1{position:relative}.rb-client-js-components-___DimmableImage-module__dimmable-image___c3hS1 .rb-client-js-components-___DimmableImage-module__content___grUtC{position:absolute;top:0;left:0;width:100%;height:100%}.rb-client-js-components-___DimmableImage-module__dimmable-image___c3hS1 .rb-client-js-components-___DimmableImage-module__hover-content___0odVB{opacity:0;position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);text-align:center;width:160px}@media(max-width: 768px){.rb-client-js-components-___DimmableImage-module__dimmable-image___c3hS1 .rb-client-js-components-___DimmableImage-module__hover-content___0odVB{opacity:1}.rb-client-js-components-___DimmableImage-module__dimmable-image___c3hS1 .img{filter:brightness(80%)}}@media(min-width: 768px){.rb-client-js-components-___DimmableImage-module__dimmable-image___c3hS1:hover .img{filter:blur(2px) contrast(150%) brightness(40%);transition:all 30ms ease}.rb-client-js-components-___DimmableImage-module__dimmable-image___c3hS1:hover .rb-client-js-components-___DimmableImage-module__hover-content___0odVB{opacity:1}.rb-client-js-components-___DimmableImage-module__dimmable-image___c3hS1:hover .rb-client-js-components-___DimmableImage-module__content___grUtC{opacity:0}}
+.rb-client-js-components-___Room-module__room-card___WlYI6{height:320px;width:300px}.rb-client-js-components-___Room-module__room-card___WlYI6 .rb-client-js-components-___Room-module__room-title___LWLWO{font-size:1em;text-overflow:ellipsis;overflow:hidden;white-space:nowrap}.rb-client-js-components-___Room-module__room-card___WlYI6 .rb-client-js-components-___Room-module__room-image___junl0{position:relative}.rb-client-js-components-___Room-module__room-card___WlYI6 .rb-client-js-components-___Room-module__room-image___junl0 .ui.image.dimmable{width:100%}.rb-client-js-components-___Room-module__room-card___WlYI6 .rb-client-js-components-___Room-module__room-image___junl0 .rb-client-js-components-___Room-module__room-extra-info___f6qsm{position:absolute;z-index:1;width:100%;height:100%;pointer-events:none}.rb-client-js-components-___Room-module__room-card___WlYI6 .rb-client-js-components-___Room-module__room-image___junl0 .img{width:100%;height:170px !important}.rb-client-js-components-___Room-module__room-card___WlYI6 .rb-client-js-components-___Room-module__room-description___PxwLd{word-break:break-all}.rb-client-js-components-___Room-module__room-card___WlYI6 .rb-client-js-components-___Room-module__room-description___PxwLd .rb-client-js-components-___Room-module__room-comments___YbOx9{word-break:normal;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;height:40px}.rb-client-js-components-___Room-module__room-card___WlYI6 .content{max-height:105px}.rb-client-js-components-___Room-module__room-card___WlYI6 .rb-client-js-components-___Room-module__room-content___a78ZW .rb-client-js-components-___Room-module__room-details___ibniW{float:right}.rb-client-js-components-___Room-module__room-card___WlYI6 .rb-client-js-components-___Room-module__icons-wrapper___RyACi{display:flex;justify-content:center}
+.rb-client-js-common-rooms-___RoomRenderer-module__selection-add-btn___K2MwT{pointer-events:all;margin:10px !important}
+.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY{position:relative;height:100%;width:100%;display:flex;align-items:center}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT{margin:0;position:absolute;padding:.7em .2em;z-index:3;border-radius:0;border:.5px solid rgba(0,0,0,.2)}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT:hover:not(.other){opacity:.75}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.pre-booking{background-image:repeating-linear-gradient(45deg, #ffe733, #ffe733 15px, #fff399 15px, #fff399 30px)}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.pre-booking:hover{z-index:5;border-color:rgba(0,0,0,.5)}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.pre-booking.rb-client-js-common-timeline-___TimelineItem-module__overflow-right___9sJnP{background-image:linear-gradient(to left, rgb(255, 255, 255), rgba(255, 255, 255, 0) 30px),repeating-linear-gradient(45deg, #ffe733, #ffe733 15px, #fff399 15px, #fff399 30px);border-right-style:none}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.pre-booking.rb-client-js-common-timeline-___TimelineItem-module__overflow-left___NmsLI{background-image:linear-gradient(to right, rgb(255, 255, 255), rgba(255, 255, 255, 0) 30px),repeating-linear-gradient(45deg, #ffe733, #ffe733 15px, #fff399 15px, #fff399 30px);border-left-style:none}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.pre-booking.rb-client-js-common-timeline-___TimelineItem-module__overflow-right___9sJnP.rb-client-js-common-timeline-___TimelineItem-module__overflow-left___NmsLI{background-image:linear-gradient(to right, rgb(255, 255, 255), rgba(255, 255, 255, 0) 30px),linear-gradient(to left, rgb(255, 255, 255), rgba(255, 255, 255, 0) 30px),repeating-linear-gradient(45deg, #ffe733, #ffe733 15px, #fff399 15px, #fff399 30px)}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.available{background-color:#07e04b}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.available:hover{z-index:4}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.available.rb-client-js-common-timeline-___TimelineItem-module__overflow-right___9sJnP{background-image:linear-gradient(to left, #b6fdcc, #07e04b 30px);border-right-style:none}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.available.rb-client-js-common-timeline-___TimelineItem-module__overflow-left___NmsLI{background-image:linear-gradient(to right, #b6fdcc, #07e04b 30px);border-left-style:none}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.available.rb-client-js-common-timeline-___TimelineItem-module__overflow-right___9sJnP.rb-client-js-common-timeline-___TimelineItem-module__overflow-left___NmsLI{background-image:linear-gradient(to left, #b6fdcc, #07e04b 30px, #07e04b 50%, rgba(1, 1, 1, 0) 51%),linear-gradient(to right, #b6fdcc, #07e04b 30px, #07e04b 50%, rgba(1, 1, 1, 0) 51%)}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.booking{background-color:#fb3}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.booking.rb-client-js-common-timeline-___TimelineItem-module__overflow-right___9sJnP{background-image:linear-gradient(to left, #ffeecc, #fb3 30px);border-right-style:none}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.booking.rb-client-js-common-timeline-___TimelineItem-module__overflow-left___NmsLI{background-image:linear-gradient(to right, #ffeecc, #fb3 30px);border-left-style:none}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.booking.rb-client-js-common-timeline-___TimelineItem-module__overflow-right___9sJnP.rb-client-js-common-timeline-___TimelineItem-module__overflow-left___NmsLI{background-image:linear-gradient(to left, #ffeecc, #fb3 30px, #fb3 50%, rgba(1, 1, 1, 0) 51%),linear-gradient(to right, #ffeecc, #fb3 30px, #fb3 50%, rgba(1, 1, 1, 0) 51%)}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.conflict{background-color:#f44;z-index:4}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.conflict.rb-client-js-common-timeline-___TimelineItem-module__overflow-right___9sJnP{background-image:linear-gradient(to left, #ffaaaa, #f44 30px);border-right-style:none}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.conflict.rb-client-js-common-timeline-___TimelineItem-module__overflow-left___NmsLI{background-image:linear-gradient(to right, #ffaaaa, #f44 30px);border-left-style:none}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.conflict.rb-client-js-common-timeline-___TimelineItem-module__overflow-right___9sJnP.rb-client-js-common-timeline-___TimelineItem-module__overflow-left___NmsLI{background-image:linear-gradient(to left, #ffaaaa, #f44 30px, #f44 50%, rgba(1, 1, 1, 0) 51%),linear-gradient(to right, #ffaaaa, #f44 30px, #f44 50%, rgba(1, 1, 1, 0) 51%)}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.pre-booking-conflict{background-image:repeating-linear-gradient(45deg, #07e04b 0 5px, #1ec954 5px 10px);z-index:4}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.pre-booking-conflict:hover~.available{z-index:4}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.pre-booking-conflict.rb-client-js-common-timeline-___TimelineItem-module__overflow-right___9sJnP{background-image:linear-gradient(to left, rgb(255, 255, 255), rgba(255, 255, 255, 0) 30px),repeating-linear-gradient(45deg, #07e04b, #07e04b 15px, #1ec954 15px, #1ec954 30px);border-right-style:none}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.pre-booking-conflict.rb-client-js-common-timeline-___TimelineItem-module__overflow-left___NmsLI{background-image:linear-gradient(to right, rgb(255, 255, 255), rgba(255, 255, 255, 0) 30px),repeating-linear-gradient(45deg, #07e04b, #07e04b 15px, #1ec954 15px, #1ec954 30px);border-left-style:none}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.pre-booking-conflict.rb-client-js-common-timeline-___TimelineItem-module__overflow-right___9sJnP.rb-client-js-common-timeline-___TimelineItem-module__overflow-left___NmsLI{background-image:linear-gradient(to right, rgb(255, 255, 255), rgba(255, 255, 255, 0) 30px),linear-gradient(to left, rgb(255, 255, 255), rgba(255, 255, 255, 0) 30px),repeating-linear-gradient(45deg, #07e04b, #07e04b 15px, #1ec954 15px, #1ec954 30px)}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.concurrent-pre-booking{background-image:repeating-linear-gradient(45deg, #ffe100 0 5px, #ffcece 5px 10px)}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.conflicting-candidates{background-color:#fbd1d6}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.conflicting-candidates.rb-client-js-common-timeline-___TimelineItem-module__overflow-right___9sJnP{background-image:linear-gradient(to left, #fde8eb, #fbd1d6 30px);border-right-style:none}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.conflicting-candidates.rb-client-js-common-timeline-___TimelineItem-module__overflow-left___NmsLI{background-image:linear-gradient(to right, #fde8eb, #fbd1d6 30px);border-left-style:none}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.conflicting-candidates.rb-client-js-common-timeline-___TimelineItem-module__overflow-right___9sJnP.rb-client-js-common-timeline-___TimelineItem-module__overflow-left___NmsLI{background-image:linear-gradient(to left, #fde8eb, #fbd1d6 30px, #fbd1d6 50%, rgba(1, 1, 1, 0) 51%),linear-gradient(to right, #fde8eb, #fbd1d6 30px, #fbd1d6 50%, rgba(1, 1, 1, 0) 51%)}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.unbookable-periods{background-image:linear-gradient(-45deg, #eeeeee 22%, #bbb 24%, #bbb 26%, #eeeeee 28%, #eeeeee 47%, #bbb 49%, #bbb 51%, #eeeeee 53%, #eeeeee 72%, #bbb 74%, #bbb 76%, #eeeeee 78%);background-size:30px 30px;z-index:2;height:30px;border:1px solid #bbb}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.unbookable-hours{background-image:linear-gradient(-45deg, #eeeeee 22%, #bbb 24%, #bbb 26%, #eeeeee 28%, #eeeeee 47%, #bbb 49%, #bbb 51%, #eeeeee 53%, #eeeeee 72%, #bbb 74%, #bbb 76%, #eeeeee 78%);background-size:30px 30px;z-index:1;height:30px;border:1px solid #bbb}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.blocking{background-image:linear-gradient(-45deg, white 22%, #ffaaaa 24%, #ffaaaa 26%, white 28%, white 47%, #ffaaaa 49%, #ffaaaa 51%, white 53%, white 72%, #ffaaaa 74%, #ffaaaa 76%, white 78%);background-size:30px 30px;z-index:1;border:1px solid #faa;padding:.9em .2em}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.overridable-blocking{background-image:linear-gradient(-45deg, white 22%, #dee7f0 24%, #dee7f0 26%, white 28%, white 47%, #dee7f0 49%, #dee7f0 51%, white 53%, white 72%, #dee7f0 74%, #dee7f0 76%, white 78%);background-size:30px 30px;z-index:1;border:1px solid #749cc1;padding:.9em .2em}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.cancellation{background-color:#f9e3cf;border:1px solid #f1bb8b}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.cancellation.rb-client-js-common-timeline-___TimelineItem-module__overflow-right___9sJnP{background-image:linear-gradient(to left, #fde8eb, #fbd1d6 30px);border-right-style:none}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.cancellation.rb-client-js-common-timeline-___TimelineItem-module__overflow-left___NmsLI{background-image:linear-gradient(to right, #fde8eb, #fbd1d6 30px);border-left-style:none}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.cancellation.rb-client-js-common-timeline-___TimelineItem-module__overflow-right___9sJnP.rb-client-js-common-timeline-___TimelineItem-module__overflow-left___NmsLI{background-image:linear-gradient(to left, #fde8eb, #fbd1d6 30px, #fbd1d6 50%, rgba(1, 1, 1, 0) 51%),linear-gradient(to right, #fde8eb, #fbd1d6 30px, #fbd1d6 50%, rgba(1, 1, 1, 0) 51%)}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.pending-cancellations{background-color:#e2cebc;z-index:4}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.pending-cancellations.rb-client-js-common-timeline-___TimelineItem-module__overflow-right___9sJnP{background-image:linear-gradient(to left, white, #e2cebc 30px);border-right-style:none}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.pending-cancellations.rb-client-js-common-timeline-___TimelineItem-module__overflow-left___NmsLI{background-image:linear-gradient(to right, white, #e2cebc 30px);border-left-style:none}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.pending-cancellations.rb-client-js-common-timeline-___TimelineItem-module__overflow-right___9sJnP.rb-client-js-common-timeline-___TimelineItem-module__overflow-left___NmsLI{background-image:linear-gradient(to left, white, #e2cebc 30px, #e2cebc 50%, rgba(1, 1, 1, 0) 51%),linear-gradient(to right, white, #e2cebc 30px, #e2cebc 50%, rgba(1, 1, 1, 0) 51%)}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.rejection{background-color:#f9cebd;border:1px solid #ee7748}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.rejection.rb-client-js-common-timeline-___TimelineItem-module__overflow-right___9sJnP{background-image:linear-gradient(to left, white, #f9cebd 30px);border-right-style:none}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.rejection.rb-client-js-common-timeline-___TimelineItem-module__overflow-left___NmsLI{background-image:linear-gradient(to right, white, #f9cebd 30px);border-left-style:none}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.rejection.rb-client-js-common-timeline-___TimelineItem-module__overflow-right___9sJnP.rb-client-js-common-timeline-___TimelineItem-module__overflow-left___NmsLI{background-image:linear-gradient(to left, white, #f9cebd 30px, #f9cebd 50%, rgba(1, 1, 1, 0) 51%),linear-gradient(to right, white, #f9cebd 30px, #f9cebd 50%, rgba(1, 1, 1, 0) 51%)}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.other{background-color:#dfdfdf;border:1px solid #c6c6c6}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.other.rb-client-js-common-timeline-___TimelineItem-module__overflow-right___9sJnP{background-image:linear-gradient(to left, white, #dfdfdf 30px);border-right-style:none}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.other.rb-client-js-common-timeline-___TimelineItem-module__overflow-left___NmsLI{background-image:linear-gradient(to right, white, #dfdfdf 30px);border-left-style:none}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.other.rb-client-js-common-timeline-___TimelineItem-module__overflow-right___9sJnP.rb-client-js-common-timeline-___TimelineItem-module__overflow-left___NmsLI{background-image:linear-gradient(to left, white, #dfdfdf 30px, #dfdfdf 50%, rgba(1, 1, 1, 0) 51%),linear-gradient(to right, white, #dfdfdf 30px, #dfdfdf 50%, rgba(1, 1, 1, 0) 51%)}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.other:hover{background-color:#e2e2e2;border:1px solid #939393;z-index:4}.rb-client-js-common-timeline-___TimelineItem-module__timeline-item___OfTTY .rb-client-js-common-timeline-___TimelineItem-module__timeline-occurrence___cVyxT.clickable{cursor:pointer}.rb-client-js-common-timeline-___TimelineItem-module__editable-timeline-canvas___AwRyr{position:absolute;width:100%;height:1.4em;cursor:pointer;transition:background-color .25s ease-in;z-index:1;opacity:.4}.rb-client-js-common-timeline-___TimelineItem-module__editable-timeline-canvas___AwRyr:hover{background-color:#bbb}.rb-client-js-common-timeline-___TimelineItem-module__editable-timeline-slot___tEqV4{position:absolute;z-index:2;background-color:#00c851;top:0;height:100%}.rb-client-js-common-timeline-___TimelineItem-module__editable-timeline-time-popup___mi6Uk.ui.top.left.popup{margin-left:-1em}.rb-client-js-common-timeline-___TimelineItem-module__popup-center___Dx\+DT{text-align:center}.rb-client-js-common-timeline-___TimelineItem-module__popup-center___Dx\+DT .rb-client-js-common-timeline-___TimelineItem-module__allowed___mG2VM{font-size:.8em;color:#05af3a}.rb-client-js-common-timeline-___TimelineItem-module__header-center___Ey5u5{text-align:center}.ui.list.rb-client-js-common-timeline-___TimelineItem-module__concurrent-pre-booking-list___CWhqg{font-size:.9em}
+.rb-client-js-common-timeline-___TimelineLegend-module__legend___PjFdt{display:flex;justify-content:space-between}.rb-client-js-common-timeline-___TimelineLegend-module__legend___PjFdt:not(.rb-client-js-common-timeline-___TimelineLegend-module__compact___CfYZH){padding:1em 0 !important}.rb-client-js-common-timeline-___TimelineLegend-module__legend___PjFdt.rb-client-js-common-timeline-___TimelineLegend-module__compact___CfYZH{flex-direction:column}.rb-client-js-common-timeline-___TimelineLegend-module__legend___PjFdt .rb-client-js-common-timeline-___TimelineLegend-module__labels___UMkqz.rb-client-js-common-timeline-___TimelineLegend-module__compact___CfYZH{display:flex;align-items:center}.rb-client-js-common-timeline-___TimelineLegend-module__legend___PjFdt .rb-client-js-common-timeline-___TimelineLegend-module__labels___UMkqz .label{color:#fff;font-weight:bold;border:1px solid rgba(0,0,0,.1);padding-top:.7em;padding-bottom:.7em}.rb-client-js-common-timeline-___TimelineLegend-module__legend___PjFdt .rb-client-js-common-timeline-___TimelineLegend-module__labels___UMkqz .label.rb-client-js-common-timeline-___TimelineLegend-module__compact___CfYZH{padding:.5em;border:1px solid rgba(0,0,0,.2)}.rb-client-js-common-timeline-___TimelineLegend-module__legend___PjFdt .rb-client-js-common-timeline-___TimelineLegend-module__labels___UMkqz .label.rb-client-js-common-timeline-___TimelineLegend-module__compact___CfYZH+.rb-client-js-common-timeline-___TimelineLegend-module__text___zPWac{padding-left:.25em}.rb-client-js-common-timeline-___TimelineLegend-module__legend___PjFdt .rb-client-js-common-timeline-___TimelineLegend-module__labels___UMkqz .label.rb-client-js-common-timeline-___TimelineLegend-module__available___mDb\+1{background-color:#07e04b}.rb-client-js-common-timeline-___TimelineLegend-module__legend___PjFdt .rb-client-js-common-timeline-___TimelineLegend-module__labels___UMkqz .label.rb-client-js-common-timeline-___TimelineLegend-module__conflicting-candidate___zpXuR{background-color:#fbd1d6}.rb-client-js-common-timeline-___TimelineLegend-module__legend___PjFdt .rb-client-js-common-timeline-___TimelineLegend-module__labels___UMkqz .label.rb-client-js-common-timeline-___TimelineLegend-module__booking___36kxb{background-color:#fb3}.rb-client-js-common-timeline-___TimelineLegend-module__legend___PjFdt .rb-client-js-common-timeline-___TimelineLegend-module__labels___UMkqz .label.rb-client-js-common-timeline-___TimelineLegend-module__conflict___9u-3j{background-color:#f44}.rb-client-js-common-timeline-___TimelineLegend-module__legend___PjFdt .rb-client-js-common-timeline-___TimelineLegend-module__labels___UMkqz .label.rb-client-js-common-timeline-___TimelineLegend-module__pre-booking___sxVIr{background-image:repeating-linear-gradient(45deg, #ffe733, #ffe733 15px, #fff399 15px, #fff399 30px);color:#c4930d}.rb-client-js-common-timeline-___TimelineLegend-module__legend___PjFdt .rb-client-js-common-timeline-___TimelineLegend-module__labels___UMkqz .label.rb-client-js-common-timeline-___TimelineLegend-module__pre-booking-conflict___WlOCw{background-image:repeating-linear-gradient(45deg, #07e04b 0 5px, #1ec954 5px 10px)}.rb-client-js-common-timeline-___TimelineLegend-module__legend___PjFdt .rb-client-js-common-timeline-___TimelineLegend-module__labels___UMkqz .label.rb-client-js-common-timeline-___TimelineLegend-module__concurrent-pre-booking___ARcZZ{background-image:repeating-linear-gradient(45deg, #ffe100 0 5px, #ffcece 5px 10px);color:#998700}.rb-client-js-common-timeline-___TimelineLegend-module__legend___PjFdt .rb-client-js-common-timeline-___TimelineLegend-module__labels___UMkqz .label.rb-client-js-common-timeline-___TimelineLegend-module__cancellation___32k9Q{background-color:#f9e3cf;border:1px solid #f1bb8b;color:#e0791c}.rb-client-js-common-timeline-___TimelineLegend-module__legend___PjFdt .rb-client-js-common-timeline-___TimelineLegend-module__labels___UMkqz .label.rb-client-js-common-timeline-___TimelineLegend-module__unbookable___1KPL0{background-image:linear-gradient(-45deg, #eeeeee 22%, #bbb 24%, #bbb 26%, #eeeeee 28%, #eeeeee 47%, #bbb 49%, #bbb 51%, #eeeeee 53%, #eeeeee 72%, #bbb 74%, #bbb 76%, #eeeeee 78%);background-size:35px 35px;border:1px solid #bbb;color:#555}.rb-client-js-common-timeline-___TimelineLegend-module__legend___PjFdt .rb-client-js-common-timeline-___TimelineLegend-module__labels___UMkqz .label.rb-client-js-common-timeline-___TimelineLegend-module__pending-cancellation___0vovJ{background-color:#e2cebc}.rb-client-js-common-timeline-___TimelineLegend-module__legend___PjFdt .rb-client-js-common-timeline-___TimelineLegend-module__labels___UMkqz .label.rb-client-js-common-timeline-___TimelineLegend-module__blocking___q2KSE{background-image:linear-gradient(-45deg, white 22%, #ffaaaa 24%, #ffaaaa 26%, white 28%, white 47%, #ffaaaa 49%, #ffaaaa 51%, white 53%, white 72%, #ffaaaa 74%, #ffaaaa 76%, white 78%);background-size:35px 35px;border:1px solid #faa;color:#f11}.rb-client-js-common-timeline-___TimelineLegend-module__legend___PjFdt .rb-client-js-common-timeline-___TimelineLegend-module__labels___UMkqz .label.rb-client-js-common-timeline-___TimelineLegend-module__overridable-blocking___5-9bh{background-image:linear-gradient(-45deg, white 22%, #dee7f0 24%, #dee7f0 26%, white 28%, white 47%, #dee7f0 49%, #dee7f0 51%, white 53%, white 72%, #dee7f0 74%, #dee7f0 76%, white 78%);background-size:35px 35px;border:1px solid #749cc1;color:#40698f}.rb-client-js-common-timeline-___TimelineLegend-module__legend___PjFdt .rb-client-js-common-timeline-___TimelineLegend-module__labels___UMkqz .label.rb-client-js-common-timeline-___TimelineLegend-module__rejection___sylcy{background-color:#f9cebd;border:1px solid #ee7748;color:#d74b14}.rb-client-js-common-timeline-___TimelineLegend-module__legend___PjFdt .rb-client-js-common-timeline-___TimelineLegend-module__labels___UMkqz .label.rb-client-js-common-timeline-___TimelineLegend-module__other___9uuJ8{background-color:#dfdfdf;border:1px solid #9f9f9f}
+.ui.dimmer.rb-client-js-common-timeline-___SingleRoomTimelineModal-module__dimmer___Yh3nk{z-index:1001}
+.rb-client-js-components-___WeekdayInformation-module__weekday___ohBFC{color:#999}.rb-client-js-components-___WeekdayInformation-module__booking-times-weekday___rnS\+k{color:#999;font-weight:bold}
+.rb-client-js-common-timeline-___RowActionsDropdown-module__actions-dropdown___HQ8ue .dropdown.icon{display:none}.rb-client-js-common-timeline-___RowActionsDropdown-module__actions-dropdown___HQ8ue .rb-client-js-common-timeline-___RowActionsDropdown-module__dropdown-button___f3CLT{color:#bbb;background:none !important;padding-bottom:1em}.rb-client-js-common-timeline-___RowActionsDropdown-module__actions-dropdown___HQ8ue .rb-client-js-common-timeline-___RowActionsDropdown-module__dropdown-button___f3CLT:hover{color:#fb3}.rb-client-js-common-timeline-___RowActionsDropdown-module__actions-dropdown___HQ8ue .rb-client-js-common-timeline-___RowActionsDropdown-module__dropdown-button___f3CLT.button{padding:0 !important}.rb-client-js-common-timeline-___RowActionsDropdown-module__actions-dropdown___HQ8ue .rb-client-js-common-timeline-___RowActionsDropdown-module__open___PTv6v .icon{color:#cb6d04 !important}.rb-client-js-common-timeline-___RowActionsDropdown-module__rejection-form___swSJD{margin:1.25em}.rb-client-js-common-timeline-___RowActionsDropdown-module__rejection-form___swSJD .button{background-color:#c00 !important;margin-top:1.3em}.rb-client-js-common-timeline-___RowActionsDropdown-module__rejection-form___swSJD .rb-client-js-common-timeline-___RowActionsDropdown-module__form-description___YNFOr{padding-bottom:1em}
+@keyframes rb-client-js-common-timeline-___TimelineContent-module__rotate90___WAE\+z{0%{transform:rotate(0deg)}100%{transform:rotate(-90deg)}}.rb-client-js-common-timeline-___TimelineContent-module__timeline-header___gv7jz{display:flex;min-height:40px}.rb-client-js-common-timeline-___TimelineContent-module__timeline-header___gv7jz .rb-client-js-common-timeline-___TimelineContent-module__timeline-header-labels___lrNFW{flex:1;position:relative}.rb-client-js-common-timeline-___TimelineContent-module__timeline-header___gv7jz .rb-client-js-common-timeline-___TimelineContent-module__timeline-header-label___mK\+WJ{height:100%;line-height:40px;text-align:left}.rb-client-js-common-timeline-___TimelineContent-module__timeline-header___gv7jz .rb-client-js-common-timeline-___TimelineContent-module__timeline-header-label___mK\+WJ .rb-client-js-common-timeline-___TimelineContent-module__timeline-label-text___pnioP{width:5em;margin-left:-2.5em;display:inline-block;text-align:center;color:#bbb}.rb-client-js-common-timeline-___TimelineContent-module__timeline-header___gv7jz.timeline-non-selectable{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.rb-client-js-common-timeline-___TimelineContent-module__timeline-header___gv7jz .rb-client-js-common-timeline-___TimelineContent-module__timeline-header-actions___Dmtux{width:70px}.rb-client-js-common-timeline-___TimelineContent-module__timeline-lines___ZwaoX{position:absolute;height:100%;top:0}.rb-client-js-common-timeline-___TimelineContent-module__timeline-lines___ZwaoX .rb-client-js-common-timeline-___TimelineContent-module__timeline-divider___fh1yb{position:absolute;top:0;height:100%;border-left:1px solid #f9f9f9}.rb-client-js-common-timeline-___TimelineContent-module__timeline-content___ScKSK{position:relative}.rb-client-js-common-timeline-___TimelineContent-module__timeline-content___ScKSK .rb-client-js-common-timeline-___TimelineContent-module__timeline-row___vNqjJ{height:40px;width:100%;display:flex}.rb-client-js-common-timeline-___TimelineContent-module__timeline-content___ScKSK .rb-client-js-common-timeline-___TimelineContent-module__timeline-row___vNqjJ .rb-client-js-common-timeline-___TimelineContent-module__timeline-row-label___UfE9B{height:100%;line-height:40px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rb-client-js-common-timeline-___TimelineContent-module__timeline-content___ScKSK .rb-client-js-common-timeline-___TimelineContent-module__timeline-row___vNqjJ .rb-client-js-common-timeline-___TimelineContent-module__timeline-row-label___UfE9B .rb-client-js-common-timeline-___TimelineContent-module__label___MnKBK{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-right:1.5em;padding-right:.5em;text-align:right}.rb-client-js-common-timeline-___TimelineContent-module__timeline-content___ScKSK .rb-client-js-common-timeline-___TimelineContent-module__timeline-row___vNqjJ .rb-client-js-common-timeline-___TimelineContent-module__timeline-row-label___UfE9B .rb-client-js-common-timeline-___TimelineContent-module__label___MnKBK.rb-client-js-common-timeline-___TimelineContent-module__gutter___cUWi\+{border-left:5px solid #daf1ea;background-color:#fff}.rb-client-js-common-timeline-___TimelineContent-module__timeline-content___ScKSK .rb-client-js-common-timeline-___TimelineContent-module__timeline-row___vNqjJ .rb-client-js-common-timeline-___TimelineContent-module__timeline-row-label___UfE9B .rb-client-js-common-timeline-___TimelineContent-module__label___MnKBK .rb-client-js-common-timeline-___TimelineContent-module__split-label___Oyzwo{line-height:20px}.rb-client-js-common-timeline-___TimelineContent-module__timeline-content___ScKSK .rb-client-js-common-timeline-___TimelineContent-module__timeline-row___vNqjJ .rb-client-js-common-timeline-___TimelineContent-module__timeline-row-label___UfE9B .rb-client-js-common-timeline-___TimelineContent-module__label___MnKBK .rb-client-js-common-timeline-___TimelineContent-module__sub-label___6qe5Q{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rb-client-js-common-timeline-___TimelineContent-module__timeline-content___ScKSK .rb-client-js-common-timeline-___TimelineContent-module__timeline-row___vNqjJ .rb-client-js-common-timeline-___TimelineContent-module__timeline-row-content___gDsJj{flex:1;position:relative;height:40px}.rb-client-js-common-timeline-___TimelineContent-module__timeline-content___ScKSK .rb-client-js-common-timeline-___TimelineContent-module__timeline-row___vNqjJ .rb-client-js-common-timeline-___TimelineContent-module__timeline-row-actions___MKvW2{color:#bbb;font-size:1.8em;z-index:4;text-align:right;width:70px}.rb-client-js-common-timeline-___TimelineContent-module__timeline-content___ScKSK .rb-client-js-common-timeline-___TimelineContent-module__timeline-row___vNqjJ:hover .rb-client-js-common-timeline-___TimelineContent-module__timeline-row-actions___MKvW2 .icon{color:#fb3}.rb-client-js-common-timeline-___TimelineContent-module__timeline-content___ScKSK.timeline-non-selectable{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.rb-client-js-common-timeline-___TimelineContent-module__timeline-item-placeholder___6FiKW{position:relative;z-index:1000}.rb-client-js-common-timeline-___TimelineContent-module__timeline-item-placeholder___6FiKW .line{height:1em !important;background-color:unset !important}.rb-client-js-common-timeline-___TimelineContent-module__timeline-loader___QjThv.ui.loader{margin-top:2em !important;color:rgba(0,0,0,.87) !important;position:fixed;bottom:10px;top:auto}.rb-client-js-common-timeline-___TimelineContent-module__timeline-loader___QjThv.ui.loader::before{border-color:rgba(0,0,0,.1) !important}.rb-client-js-common-timeline-___TimelineContent-module__timeline-loader___QjThv.ui.loader::after{border-color:#bbb rgba(0,0,0,0) rgba(0,0,0,0) !important}.rb-client-js-common-timeline-___TimelineContent-module__auto-sizer-wrapper___MKg6w{overflow-x:hidden;overflow-y:auto}.rb-client-js-common-timeline-___TimelineContent-module__daily-timeline___yc5KC{display:flex;flex-direction:column;flex:1}.rb-client-js-common-timeline-___TimelineContent-module__daily-timeline___yc5KC .ReactVirtualized__Grid__innerScrollContainer{margin-right:2em}.rb-client-js-common-timeline-___TimelineContent-module__daily-timeline___yc5KC .rb-client-js-common-timeline-___TimelineContent-module__timeline-header___gv7jz{margin-right:2em}.rb-client-js-common-timeline-___TimelineContent-module__rotate-icon___F0WV8{animation:rb-client-js-common-timeline-___TimelineContent-module__rotate90___WAE\+z 1s ease-out 1s forwards}
+@keyframes rb-client-js-common-timeline-___WeeklyTimelineContent-module__rotate90___uZ73G{0%{transform:rotate(0deg)}100%{transform:rotate(-90deg)}}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-header___MJxmx{display:flex;min-height:40px}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-header___MJxmx .rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-header-labels___nzC1w{flex:1;position:relative}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-header___MJxmx .rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-header-label___-qLRE{height:100%;line-height:40px;text-align:left}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-header___MJxmx .rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-header-label___-qLRE .rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-label-text___ITYKU{width:5em;margin-left:-2.5em;display:inline-block;text-align:center;color:#bbb}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-header___MJxmx.timeline-non-selectable{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-header___MJxmx .rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-header-actions___yx9FN{width:70px}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-lines___xk7kS{position:absolute;height:100%;top:0}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-lines___xk7kS .rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-divider___dzfQz{position:absolute;top:0;height:100%;border-left:1px solid #f9f9f9}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-content___fUf3T{position:relative}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-content___fUf3T .rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-row___SEA1b{height:40px;width:100%;display:flex}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-content___fUf3T .rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-row___SEA1b .rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-row-label___K0fdn{height:100%;line-height:40px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-content___fUf3T .rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-row___SEA1b .rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-row-label___K0fdn .rb-client-js-common-timeline-___WeeklyTimelineContent-module__label___1rR2w{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-right:1.5em;padding-right:.5em;text-align:right}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-content___fUf3T .rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-row___SEA1b .rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-row-label___K0fdn .rb-client-js-common-timeline-___WeeklyTimelineContent-module__label___1rR2w.rb-client-js-common-timeline-___WeeklyTimelineContent-module__gutter___sOhfZ{border-left:5px solid #daf1ea;background-color:#fff}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-content___fUf3T .rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-row___SEA1b .rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-row-label___K0fdn .rb-client-js-common-timeline-___WeeklyTimelineContent-module__label___1rR2w .rb-client-js-common-timeline-___WeeklyTimelineContent-module__split-label___4CS8W{line-height:20px}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-content___fUf3T .rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-row___SEA1b .rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-row-label___K0fdn .rb-client-js-common-timeline-___WeeklyTimelineContent-module__label___1rR2w .rb-client-js-common-timeline-___WeeklyTimelineContent-module__sub-label___qSJKG{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-content___fUf3T .rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-row___SEA1b .rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-row-content___MatZI{flex:1;position:relative;height:40px}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-content___fUf3T .rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-row___SEA1b .rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-row-actions___LjYyX{color:#bbb;font-size:1.8em;z-index:4;text-align:right;width:70px}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-content___fUf3T .rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-row___SEA1b:hover .rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-row-actions___LjYyX .icon{color:#fb3}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-content___fUf3T.timeline-non-selectable{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-item-placeholder___T1HM3{position:relative;z-index:1000}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-item-placeholder___T1HM3 .line{height:1em !important;background-color:unset !important}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-loader___\+ia-h.ui.loader{margin-top:2em !important;color:rgba(0,0,0,.87) !important;position:fixed;bottom:10px;top:auto}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-loader___\+ia-h.ui.loader::before{border-color:rgba(0,0,0,.1) !important}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-loader___\+ia-h.ui.loader::after{border-color:#bbb rgba(0,0,0,0) rgba(0,0,0,0) !important}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__auto-sizer-wrapper___HCIjU{overflow-x:hidden;overflow-y:auto}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__daily-timeline___NJ2G-{display:flex;flex-direction:column;flex:1}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__daily-timeline___NJ2G- .ReactVirtualized__Grid__innerScrollContainer{margin-right:2em}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__daily-timeline___NJ2G- .rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-header___MJxmx{margin-right:2em}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__rotate-icon___od0oB{animation:rb-client-js-common-timeline-___WeeklyTimelineContent-module__rotate90___uZ73G 1s ease-out 1s forwards}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-day-divider___vODmG{position:absolute;top:0;height:100%;border-left:1px solid #dfdfdf}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-day-divider___vODmG.hidden{opacity:.35;background-color:#dfdfdf}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-day-divider___vODmG.hidden+.visible{border-left:none}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-day-divider___vODmG.rb-client-js-common-timeline-___WeeklyTimelineContent-module__weekend___tdzgk{background-color:#e6f9ff}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-row-content___MatZI{display:flex;flex:1;width:100%;height:40px}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-header-labels___nzC1w{flex:1;display:flex;position:relative}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-header-label___-qLRE{flex:1;height:100%;line-height:40px;text-align:center}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-header-label___-qLRE.weekly .rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-label-text___ITYKU,.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-header-label___-qLRE.monthly .rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-label-text___ITYKU{cursor:pointer}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-header-label___-qLRE .rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-label-text___ITYKU{display:inline-block;color:#bbb}.rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-header-label___-qLRE.rb-client-js-common-timeline-___WeeklyTimelineContent-module__weekend___tdzgk .rb-client-js-common-timeline-___WeeklyTimelineContent-module__timeline-label-text___ITYKU{font-weight:bold;color:#66d9ff}
+.rb-client-js-common-timeline-___Timeline-module__timeline___FOu-\+{position:relative}.rb-client-js-common-timeline-___Timeline-module__timeline___FOu-\+ .ReactVirtualized__Grid.ReactVirtualized__List{overflow:unset !important}.rb-client-js-common-timeline-___Timeline-module__timeline___FOu-\+ .redux-lazy-scroll{overflow:hidden !important}
+.rb-client-js-common-timeline-___DateNavigator-module__date-navigator___7T9Hw{margin-left:auto}.rb-client-js-common-timeline-___DateNavigator-module__date-navigator___7T9Hw .rb-client-js-common-timeline-___DateNavigator-module__date-navigator-item___-U1VP{font-size:1em;margin:0 .5em .5em 0}
+.rb-client-js-components-___SearchBar-module__room-filters___JnpBp .rb-client-js-components-___SearchBar-module__text-filter___cqWRZ input{width:300px}@media(max-width: 768px){.rb-client-js-components-___SearchBar-module__room-filters___JnpBp .rb-client-js-components-___SearchBar-module__text-filter___cqWRZ input{width:275px}}.rb-client-js-components-___SearchBar-module__room-filters___JnpBp .rb-client-js-components-___SearchBar-module__text-filter___cqWRZ input+i.rb-client-js-components-___SearchBar-module__icon___dpueC.rb-client-js-components-___SearchBar-module__remove___dMhH5{cursor:pointer}
+.rb-client-js-modules-blockings-___BlockingCard-module__blocking-item___F2wKC{cursor:pointer}.rb-client-js-modules-blockings-___BlockingCard-module__blocking-item___F2wKC .rb-client-js-modules-blockings-___BlockingCard-module__blocking-reason___eERt8{overflow:hidden;text-overflow:ellipsis;white-space:pre}
+.rb-client-js-modules-blockings-___BlockingList-module__blockings-container___bWdQF{padding:2em}@media(min-width: 992px){.rb-client-js-modules-blockings-___BlockingList-module__blockings-container___bWdQF{width:75% !important}}.rb-client-js-modules-blockings-___BlockingList-module__blockings-container___bWdQF .rb-client-js-modules-blockings-___BlockingList-module__blockings-list___jxI\+w,.rb-client-js-modules-blockings-___BlockingList-module__blockings-container___bWdQF .blockings-placeholders{margin:10px 0 0 -5px}.rb-client-js-modules-blockings-___BlockingList-module__blockings-container___bWdQF .ui.stuck-container+.rb-client-js-modules-blockings-___BlockingList-module__blockings-list___jxI\+w{padding-top:60px}
+.rb-client-js-components-___RoomSelector-module__room-selector___w\+uPP .rb-client-js-components-___RoomSelector-module__selected-rooms-row___khmJX{padding-top:0 !important}.rb-client-js-components-___RoomSelector-module__room-selector___w\+uPP .rb-client-js-components-___RoomSelector-module__selected-rooms-row___khmJX .rb-client-js-components-___RoomSelector-module__rooms-list___AwRxD{max-height:140px;overflow:hidden;overflow-y:auto}.rb-client-js-components-___RoomSelector-module__room-selector___w\+uPP .rb-client-js-components-___RoomSelector-module__selected-rooms-row___khmJX .rb-client-js-components-___RoomSelector-module__rooms-list___AwRxD .item{display:flex;overflow:hidden;align-items:center}.rb-client-js-components-___RoomSelector-module__room-selector___w\+uPP .rb-client-js-components-___RoomSelector-module__selected-rooms-row___khmJX .rb-client-js-components-___RoomSelector-module__rooms-list___AwRxD .item .rb-client-js-components-___RoomSelector-module__room-actions___4ACiY{margin-left:auto;display:flex;align-items:center}.rb-client-js-components-___RoomSelector-module__room-selector___w\+uPP .rb-client-js-components-___RoomSelector-module__selected-rooms-row___khmJX .rb-client-js-components-___RoomSelector-module__rooms-list___AwRxD .item .rb-client-js-components-___RoomSelector-module__room-actions___4ACiY .icon.remove{cursor:pointer}
+.ui.modal .header.rb-client-js-modules-blockings-___BlockingModal-module__blocking-modal-header___3sWIZ{display:flex;justify-content:space-between}.rb-client-js-modules-blockings-___BlockingModal-module__blocking-actions___VMR4h{display:inline-block}.rb-client-js-modules-blockings-___BlockingModal-module__blocking-actions___VMR4h .icon{font-size:1em !important}.rb-client-js-modules-blockings-___BlockingModal-module__blocking-actions___VMR4h .icon.rb-client-js-modules-blockings-___BlockingModal-module__action___Vc-DS{cursor:pointer}.rb-client-js-modules-blockings-___BlockingModal-module__rejection-form___XXP-G{width:350px}
+.rb-client-js-common-filters-___FilterDropdown-module__filter-dropdown___MuR0h .rb-client-js-common-filters-___FilterDropdown-module__filter-dropdown-actions___8xNNz{margin-top:15px}.ui.button.rb-client-js-common-filters-___FilterDropdown-module__filter-dropdown-button___98FUh,.rb-client-js-common-filters-___FilterDropdown-module__filter-dropdown-button-counter___tOyRK.ui.button{position:relative;transition:width .15s ease-out}@media(max-width: 992px){.ui.button.rb-client-js-common-filters-___FilterDropdown-module__filter-dropdown-button___98FUh,.rb-client-js-common-filters-___FilterDropdown-module__filter-dropdown-button-counter___tOyRK.ui.button{padding-left:.75em;padding-right:.75em}}.ui.button.rb-client-js-common-filters-___FilterDropdown-module__filter-dropdown-button___98FUh>i.icon.angle.down,.rb-client-js-common-filters-___FilterDropdown-module__filter-dropdown-button-counter___tOyRK.ui.button>i.icon.angle.down{padding-left:1em;transition:padding-left .15s ease-out}@media(max-width: 992px){.ui.button.rb-client-js-common-filters-___FilterDropdown-module__filter-dropdown-button___98FUh>i.icon.angle.down,.rb-client-js-common-filters-___FilterDropdown-module__filter-dropdown-button-counter___tOyRK.ui.button>i.icon.angle.down{margin:0;padding-left:.5em}}@media(max-width: 992px){.ui.small.buttons .button.rb-client-js-common-filters-___FilterDropdown-module__filter-dropdown-button___98FUh,.rb-client-js-common-filters-___FilterDropdown-module__filter-dropdown-button-counter___tOyRK.ui.small.buttons .button.ui.button{font-size:.8rem}}.ui.button.rb-client-js-common-filters-___FilterDropdown-module__filter-dropdown-button-counter___tOyRK>.ui.white.label{color:#2185d0;background-color:#fff;margin-left:.5em}.ui.button.rb-client-js-common-filters-___FilterDropdown-module__filter-dropdown-button-counter___tOyRK.primary>i.icon.angle.down{padding-left:2.5em}.rb-client-js-common-filters-___FilterDropdown-module__filter-dropdown-footer___0nK3b.ui.buttons{margin-top:10px}
+.rb-client-js-modules-roomList-filters-___CapacityForm-module__capacity-form___T9IL9{display:flex;flex-direction:row;align-items:center}
+.rb-client-js-modules-roomList-filters-___EquipmentForm-module__equipment-accordion___7pFNK{margin-top:15px}
+.rb-client-js-modules-roomList-filters-___ShowOnlyForm-module__show-only-filter___jA7Mm{display:flex;align-items:center;width:300px}.rb-client-js-modules-roomList-filters-___ShowOnlyForm-module__show-only-filter___jA7Mm:not(:nth-last-child(2)){margin-bottom:10px}.rb-client-js-modules-roomList-filters-___ShowOnlyForm-module__show-only-filter___jA7Mm .toggle.checkbox{margin-right:10px}.rb-client-js-modules-roomList-filters-___ShowOnlyForm-module__show-only-filter___jA7Mm .icon{height:100%}
+.rb-client-js-modules-roomList-___RoomFilterBar-module__filter-bar-button-label___i93R8.ui.label{margin-left:.5em;position:absolute;top:calc(50% - 1em)}
+.rb-client-js-modules-bookRoom-___BookingFilterBar-module__recurrence-bar___YocdZ div.ui.icon{display:flex;align-items:center}
+.rb-client-js-modules-roomList-___RoomList-module__room-list___XsURB .rb-client-js-modules-roomList-___RoomList-module__results-count___9j3-2{margin-bottom:10px;font-weight:bold;font-size:1.5em}.rb-client-js-modules-roomList-___RoomList-module__room-list___XsURB .redux-lazy-scroll{overflow:visible !important;margin:.15em}.rb-client-js-modules-roomList-___RoomList-module__room-list___XsURB .rb-client-js-modules-roomList-___RoomList-module__actions___ihYcN{margin-left:auto}.rb-client-js-modules-roomList-___RoomList-module__room-list___XsURB .rb-client-js-modules-roomList-___RoomList-module__actions___ihYcN .ui.button.dropdown{display:flex;align-items:baseline}
+.rb-client-js-modules-bookRoom-filters-___RecurrenceForm-module__recurrence-every___e08jt.fields.inline .ui.selection.dropdown{min-width:100px}.rb-client-js-modules-bookRoom-filters-___RecurrenceForm-module__recurrence-every___e08jt.fields.inline .field .ui.input input{width:80px}.rb-client-js-modules-bookRoom-filters-___RecurrenceForm-module__weekday-recurrence-section___HAGgE{display:flex;align-items:center}
+.rb-client-js-modules-bookRoom-filters-___TimeForm-module__time-picker___qCzjo{width:90px}
+.rb-client-js-modules-bookRoom-___BookingSuggestion-module__suggestion___eZCf8{margin:0 !important;height:100%;opacity:.9}.rb-client-js-modules-bookRoom-___BookingSuggestion-module__suggestion___eZCf8 .rb-client-js-modules-bookRoom-___BookingSuggestion-module__suggestion-text___oaQnE{cursor:pointer;pointer-events:all}
+.rb-client-js-modules-bookRoom-___BookRoom-module__view-icons___ubZrp{height:100%;margin-left:auto}.rb-client-js-modules-bookRoom-___BookRoom-module__view-icons___ubZrp .ui.active.button,.rb-client-js-modules-bookRoom-___BookRoom-module__view-icons___ubZrp .ui.active.button:hover{background-color:#2185d0;color:#fff;cursor:default}.rb-client-js-modules-bookRoom-___BookRoom-module__view-icons___ubZrp .ui.active.button .rb-client-js-modules-bookRoom-___BookRoom-module__switcher-icon___UrL8q,.rb-client-js-modules-bookRoom-___BookRoom-module__view-icons___ubZrp .ui.active.button:hover .rb-client-js-modules-bookRoom-___BookRoom-module__switcher-icon___UrL8q{cursor:default}.rb-client-js-modules-bookRoom-___BookRoom-module__view-icons___ubZrp i.icons{height:32px}.rb-client-js-modules-bookRoom-___BookRoom-module__view-icons___ubZrp i:not(.disabled):hover{cursor:pointer}.rb-client-js-modules-bookRoom-___BookRoom-module__view-icons___ubZrp i.disabled:hover{cursor:default}.rb-client-js-modules-bookRoom-___BookRoom-module__view-icons___ubZrp .rb-client-js-modules-bookRoom-___BookRoom-module__icons-wrapper___Nifk3{display:flex;justify-content:flex-end}.rb-client-js-modules-bookRoom-___BookRoom-module__view-icons___ubZrp .rb-client-js-modules-bookRoom-___BookRoom-module__icons-wrapper___Nifk3 .icon:last-child{margin-right:.75em}.rb-client-js-modules-bookRoom-___BookRoom-module__available-room-list___rs0uk .rb-client-js-modules-bookRoom-___BookRoom-module__results-count___je5Di{margin-bottom:10px}.rb-client-js-modules-bookRoom-___BookRoom-module__available-room-list___rs0uk .rb-client-js-modules-bookRoom-___BookRoom-module__results-count___je5Di .ui.menu .item > i.icon{margin-right:.5em}.rb-client-js-modules-bookRoom-___BookRoom-module__available-room-list___rs0uk .rb-client-js-modules-bookRoom-___BookRoom-module__results-count___je5Di .rb-client-js-modules-bookRoom-___BookRoom-module__results-count-menu___PWuVC{position:relative;transition:opacity .25s ease-in}@media(max-width: 768px){.rb-client-js-modules-bookRoom-___BookRoom-module__available-room-list___rs0uk .rb-client-js-modules-bookRoom-___BookRoom-module__results-count___je5Di .rb-client-js-modules-bookRoom-___BookRoom-module__results-count-menu___PWuVC .item{padding:.4em}.rb-client-js-modules-bookRoom-___BookRoom-module__available-room-list___rs0uk .rb-client-js-modules-bookRoom-___BookRoom-module__results-count___je5Di .rb-client-js-modules-bookRoom-___BookRoom-module__results-count-menu___PWuVC .item .label{margin-left:0}}.rb-client-js-modules-bookRoom-___BookRoom-module__available-room-list___rs0uk .rb-client-js-modules-bookRoom-___BookRoom-module__results-count___je5Di .rb-client-js-modules-bookRoom-___BookRoom-module__results-count-menu___PWuVC.loading{opacity:.3;width:50%}.rb-client-js-modules-bookRoom-___BookRoom-module__available-room-list___rs0uk .rb-client-js-modules-bookRoom-___BookRoom-module__results-count___je5Di .rb-client-js-modules-bookRoom-___BookRoom-module__loading-indicator___xLZ\+7{padding:8px;width:100%;height:43.6px}.rb-client-js-modules-bookRoom-___BookRoom-module__available-room-list___rs0uk .rb-client-js-modules-bookRoom-___BookRoom-module__results-count___je5Di .rb-client-js-modules-bookRoom-___BookRoom-module__loading-indicator___xLZ\+7 .bar{background:#dfdfdf;width:100%;height:7px}.rb-client-js-modules-bookRoom-___BookRoom-module__available-room-list___rs0uk .rb-client-js-modules-bookRoom-___BookRoom-module__results-count___je5Di .rb-client-js-modules-bookRoom-___BookRoom-module__loading-indicator___xLZ\+7 .bar:not(:last-child){margin-bottom:4px}.rb-client-js-modules-bookRoom-___BookRoom-module__available-room-list___rs0uk .redux-lazy-scroll{overflow:visible !important;margin:.15em}.rb-client-js-modules-bookRoom-___BookRoom-module__available-room-list___rs0uk .corner.icon.rb-client-js-modules-bookRoom-___BookRoom-module__prebooking-corner-icon___u8WxG{cursor:pointer;color:#fff;font-size:.8em;right:4px;bottom:2px;text-shadow:none}.rb-client-js-modules-bookRoom-___BookRoom-module__message-nothing___tDcD5.ui.message{margin-bottom:3em}.rb-client-js-modules-bookRoom-___BookRoom-module__suggestions-container___frQju .rb-client-js-modules-bookRoom-___BookRoom-module__divider-icon___GfFK-.circular.icon{font-size:2em}.rb-client-js-modules-bookRoom-___BookRoom-module__suggestions-container___frQju .rb-client-js-modules-bookRoom-___BookRoom-module__header___xABLO{margin:0 0 2em 0}
+.rb-client-js-components-___BookingBootstrapForm-module__booking-type-field___Ph9h8{display:flex;justify-content:center}.ui.form .rb-client-js-components-___BookingBootstrapForm-module__recurrence-field___-7oHd.inline.fields{display:flex;justify-content:space-around}.ui.form .rb-client-js-components-___BookingBootstrapForm-module__recurrence-field___-7oHd.inline.fields>*{flex:1}.ui.form .rb-client-js-components-___BookingBootstrapForm-module__recurrence-field___-7oHd.inline.fields>* .ui.input input{width:100%;min-width:60px}.ui.form .rb-client-js-components-___BookingBootstrapForm-module__recurrence-field___-7oHd.inline.fields>.dropdown{min-width:0}@media(max-width: 768px){.DateInput{width:110px}}
+.rb-client-js-components-___RoomBasicDetails-module__photo-dimmable-width___KHK2-{width:100%}.rb-client-js-components-___RoomBasicDetails-module__photo-dimmable-width___KHK2- .rb-client-js-components-___RoomBasicDetails-module__photo-width___KfWOp{width:100%}.rb-client-js-components-___RoomBasicDetails-module__photo-dimmable-width___KHK2- .rb-client-js-components-___RoomBasicDetails-module__photo-width___KfWOp img{width:100%}.rb-client-js-components-___RoomBasicDetails-module__photo-dimmer___QrDvw{display:flex;justify-content:center}.rb-client-js-components-___RoomBasicDetails-module__feature-box___vezFR{pointer-events:none;position:absolute;display:flex;bottom:-1px;width:100%}.rb-client-js-components-___RoomBasicDetails-module__feature-box___vezFR .rb-client-js-components-___RoomBasicDetails-module__feature-entries___lOZ55{cursor:default;pointer-events:auto;background-color:#fff;border-radius:3px 3px 0 0;border-color:#dfdfdf #dfdfdf #fff #dfdfdf;border-width:1px 1px 2px 1px;border-style:solid;padding:5px;margin:auto}.rb-client-js-components-___RoomBasicDetails-module__feature-box___vezFR .icon{display:inline;padding:0 .25em}.rb-client-js-components-___RoomBasicDetails-module__photo-column___v0g6v{overflow:hidden}.rb-client-js-components-___RoomBasicDetails-module__photo-column___v0g6v .rb-client-js-components-___RoomBasicDetails-module__image-container___Uqixh{border:1px solid #dfdfdf;position:relative;height:100%;width:100%}@media(max-width: 768px){.rb-client-js-components-___RoomBasicDetails-module__photo-column___v0g6v .rb-client-js-components-___RoomBasicDetails-module__image-container___Uqixh{border:none}}.rb-client-js-components-___RoomBasicDetails-module__photo-column___v0g6v .rb-client-js-components-___RoomBasicDetails-module__image-container___Uqixh.rb-client-js-components-___RoomBasicDetails-module__clickable___oDcjv{cursor:zoom-in !important}.ui.grid>.rb-client-js-components-___RoomBasicDetails-module__data-column___DvmDh.column{padding-left:2em}ul.rb-client-js-components-___RoomBasicDetails-module__room-basic-details___x27xE{list-style-type:none;padding:0;color:#333;margin-left:-2em}ul.rb-client-js-components-___RoomBasicDetails-module__room-basic-details___x27xE li{margin:.2em 0;padding-left:2em}ul.rb-client-js-components-___RoomBasicDetails-module__room-basic-details___x27xE li label,ul.rb-client-js-components-___RoomBasicDetails-module__room-basic-details___x27xE li .icon{color:#777}ul.rb-client-js-components-___RoomBasicDetails-module__room-basic-details___x27xE li .icon{margin-right:0;width:2em;display:inline-block}ul.rb-client-js-components-___RoomBasicDetails-module__room-basic-details___x27xE li.has-icon{padding-left:0}@media(max-width: 768px){ul.rb-client-js-components-___RoomBasicDetails-module__room-basic-details___x27xE li.has-icon{padding-left:1.5em}}
+.ui.modal .header.rb-client-js-common-rooms-___RoomDetailsModal-module__room-details-header___g4ahn{display:flex;justify-content:space-between}.rb-client-js-common-rooms-___RoomDetailsModal-module__room-details___A6vym .ui.icon.message.rb-client-js-common-rooms-___RoomDetailsModal-module__message-icon___\+nQHp .icon{font-size:2em}.rb-client-js-common-rooms-___RoomDetailsModal-module__room-details___A6vym .rb-client-js-common-rooms-___RoomDetailsModal-module__attribute-title___\+SYAh{padding-right:1em}.ui.basic.blue.button.rb-client-js-common-rooms-___RoomDetailsModal-module__all-bookings___0DF4U{margin-left:auto;box-shadow:none !important}
+.rb-client-js-components-___TimeInformation-module__booking-time-info___sk1ZU{margin-top:10px}.rb-client-js-components-___TimeInformation-module__occurrences-details___UZAOT{display:flex;justify-content:space-between;align-items:center}
+.rb-client-js-modules-bookRoom-___BookRoomModal-module__pre-booking-color___Iv8LH{color:#f80}.rb-client-js-modules-bookRoom-___BookRoomModal-module__events-segment-description___G7RX3{color:#bbb;padding-bottom:1em}.rb-client-js-modules-bookRoom-___BookRoomModal-module__event-checkbox___NQTS7{display:flex;align-items:center}.rb-client-js-modules-bookRoom-___BookRoomModal-module__event-checkbox___NQTS7 .rb-client-js-modules-bookRoom-___BookRoomModal-module__description___xsJJB{margin-left:1em;color:#bbb}.rb-client-js-modules-bookRoom-___BookRoomModal-module__event-checkbox___NQTS7 .rb-client-js-modules-bookRoom-___BookRoomModal-module__checkbox___a7I\+3{margin-left:auto}.rb-client-js-modules-bookRoom-___BookRoomModal-module__event-checkbox___NQTS7 .rb-client-js-modules-bookRoom-___BookRoomModal-module__link-active___Jx-jk{margin-left:.5em;margin-bottom:.15em}.rb-client-js-modules-bookRoom-___BookRoomModal-module__event-dropdown___aSZcM{display:flex;align-items:center}.rb-client-js-modules-bookRoom-___BookRoomModal-module__event-dropdown___aSZcM .field{flex-grow:1;padding-right:1em;margin:0 !important}.rb-client-js-modules-bookRoom-___BookRoomModal-module__event-dropdown___aSZcM .rb-client-js-modules-bookRoom-___BookRoomModal-module__link-active___Jx-jk .rb-client-js-modules-bookRoom-___BookRoomModal-module__link-inactive___BIcmf{margin-left:auto}.rb-client-js-modules-bookRoom-___BookRoomModal-module__event-dropdown___aSZcM .rb-client-js-modules-bookRoom-___BookRoomModal-module__link-inactive___BIcmf .icon{color:#bbb}.ui.segment.rb-client-js-modules-bookRoom-___BookRoomModal-module__pre-conflicts-segment___1tWLf{padding-left:2em}@media(max-width: 768px){.rb-client-js-modules-bookRoom-___BookRoomModal-module__usage-radio___dqDnh .ui.radio{padding-bottom:.5em}}.ui.inverted.segment.rb-client-js-modules-bookRoom-___BookRoomModal-module__internal-notes-segment___Kj6W8{background:#db9200}
+.rb-client-js-common-linking-___LinkBar-module__link-bar___NZz-U{display:flex;padding:0 20px 0 10px;margin:0;height:30px;line-height:30px;background-color:#2185d0;color:#fff}.rb-client-js-common-linking-___LinkBar-module__link-bar___NZz-U a,.rb-client-js-common-linking-___LinkBar-module__link-bar___NZz-U a:hover{color:#ffe6ba}.rb-client-js-common-linking-___LinkBar-module__link-bar___NZz-U .rb-client-js-common-linking-___LinkBar-module__clear___TjWtV{margin-left:auto;cursor:pointer}
+.rb-client-js-common-bookings-___BookingObjectLink-module__object-link___bGlUO{font-size:1.1em}
+.ui.icon.message.rb-client-js-components-___RoomKeyLocation-module__message-icon___KkBaB .icon{font-size:2em}
+.ui.icon.message.rb-client-js-common-bookings-___BookingDetails-module__message-icon___2d\+nH .icon{font-size:2em}.rb-client-js-common-bookings-___BookingDetails-module__popup-center___MlXyB{text-align:center}.rb-client-js-common-bookings-___BookingDetails-module__log-list___SJ5Wj{max-height:140px;overflow:auto}.rb-client-js-common-bookings-___BookingDetails-module__log-date___o6wKj{color:#bbb}.rb-client-js-common-bookings-___BookingDetails-module__booking-logs___VoiTi,.rb-client-js-common-bookings-___BookingDetails-module__concurrent-reservations___brBp7{margin-top:20px}.ui.modal .header.rb-client-js-common-bookings-___BookingDetails-module__booking-modal-header___6gJYs{display:flex;align-items:center}.ui.modal .header.rb-client-js-common-bookings-___BookingDetails-module__booking-modal-header___6gJYs .rb-client-js-common-bookings-___BookingDetails-module__header-text___DgVz8{flex:1}@media(max-width: 768px){.ui.modal .header.rb-client-js-common-bookings-___BookingDetails-module__booking-modal-header___6gJYs .rb-client-js-common-bookings-___BookingDetails-module__header-text___DgVz8{flex:3}}.ui.modal .header.rb-client-js-common-bookings-___BookingDetails-module__booking-modal-header___6gJYs .rb-client-js-common-bookings-___BookingDetails-module__booking-status___3cKSe{display:flex;flex:4}@media(max-width: 768px){.ui.modal .header.rb-client-js-common-bookings-___BookingDetails-module__booking-modal-header___6gJYs .rb-client-js-common-bookings-___BookingDetails-module__booking-status___3cKSe{flex:2}}.rb-client-js-common-bookings-___BookingDetails-module__rejection-form___Tthlm{width:350px}.rb-client-js-common-bookings-___BookingDetails-module__accept-with-message___-iyAl{border-left:1px solid #00af47 !important}.rb-client-js-common-bookings-___BookingDetails-module__concurrent-reservations-list___1fhwY{max-height:150px;overflow:auto;min-height:20px}
+.rb-client-js-common-bookings-___OccurrencesCounter-module__occurrence-count___sUH6D{display:flex;margin-left:auto !important}.rb-client-js-common-bookings-___OccurrencesCounter-module__occurrence-count___sUH6D .label:first-child{align-self:center}.rb-client-js-common-bookings-___OccurrencesCounter-module__occurrence-count___sUH6D .new-occurrences-count.single-arrow{display:flex;align-items:center}.rb-client-js-common-bookings-___OccurrencesCounter-module__occurrence-count___sUH6D .new-occurrences-count .rb-client-js-common-bookings-___OccurrencesCounter-module__arrow___Dgmp-{display:inline-block}.rb-client-js-common-bookings-___OccurrencesCounter-module__occurrence-count___sUH6D .new-occurrences-count:not(.single-arrow) .label{margin-top:8px}.rb-client-js-common-bookings-___OccurrencesCounter-module__occurrence-count___sUH6D .new-occurrences-count:not(.single-arrow) .rb-client-js-common-bookings-___OccurrencesCounter-module__arrow___Dgmp-{transform:rotate(15deg) scale(1.4)}.rb-client-js-common-bookings-___OccurrencesCounter-module__occurrence-count___sUH6D .rb-client-js-common-bookings-___OccurrencesCounter-module__old-occurrences-count___ztnDh .label{margin-bottom:8px}.rb-client-js-common-bookings-___OccurrencesCounter-module__occurrence-count___sUH6D .rb-client-js-common-bookings-___OccurrencesCounter-module__old-occurrences-count___ztnDh .rb-client-js-common-bookings-___OccurrencesCounter-module__arrow___Dgmp-{display:inline-block;transform:rotate(-15deg) scale(1.4)}
+.rb-client-js-common-bookings-___BookingEditCalendar-module__original-booking-header___y8aHS,.rb-client-js-common-bookings-___BookingEditCalendar-module__new-booking-header___dr\+rq{align-self:center}.rb-client-js-common-bookings-___BookingEditCalendar-module__booking-calendar___Ll9H\+{display:flex;flex-direction:column;flex:1}.rb-client-js-common-bookings-___BookingEditCalendar-module__booking-calendar___Ll9H\+ .rb-client-js-common-bookings-___BookingEditCalendar-module__legend-header___3w97E{flex:1}.rb-client-js-common-bookings-___BookingEditCalendar-module__booking-calendar___Ll9H\+ .rb-client-js-common-bookings-___BookingEditCalendar-module__calendars___ToNCs{height:100%;display:flex;flex-direction:column;justify-content:space-between}.rb-client-js-common-bookings-___BookingEditCalendar-module__booking-calendar___Ll9H\+ .rb-client-js-common-bookings-___BookingEditCalendar-module__calendars___ToNCs .rb-client-js-common-bookings-___BookingEditCalendar-module__original-booking___o4tLv{flex:1;display:flex;flex-direction:column}.rb-client-js-common-bookings-___BookingEditCalendar-module__booking-calendar___Ll9H\+ .rb-client-js-common-bookings-___BookingEditCalendar-module__calendars___ToNCs .rb-client-js-common-bookings-___BookingEditCalendar-module__new-booking___cZ98B{flex:1;display:flex;flex-direction:column}.rb-client-js-common-bookings-___BookingEditCalendar-module__booking-calendar___Ll9H\+ .rb-client-js-common-bookings-___BookingEditCalendar-module__ongoing-booking-explanation___bQEkA{height:130px}.rb-client-js-common-bookings-___BookingEditCalendar-module__booking-calendar___Ll9H\+ .rb-client-js-common-bookings-___BookingEditCalendar-module__ongoing-booking-explanation___bQEkA .content{padding-top:10px;padding-bottom:10px}.rb-client-js-common-bookings-___BookingEditCalendar-module__booking-calendar___Ll9H\+ .rb-client-js-common-bookings-___BookingEditCalendar-module__ongoing-booking-explanation___bQEkA .content .ui.list{margin-top:5px !important}
+.rb-client-js-common-bookings-___BookingEditForm-module__booking-edit-form___osQbb{margin-top:15px}.rb-client-js-common-bookings-___BookingEditForm-module__booking-edit-form___osQbb .field .SingleDatePicker,.rb-client-js-common-bookings-___BookingEditForm-module__booking-edit-form___osQbb .field .DateRangePicker{padding:0}.rb-client-js-common-bookings-___BookingEditForm-module__booking-edit-form___osQbb .field .SingleDatePicker .DateRangePicker_picker,.rb-client-js-common-bookings-___BookingEditForm-module__booking-edit-form___osQbb .field .DateRangePicker .DateRangePicker_picker{z-index:1000}.ui.inverted.segment.rb-client-js-common-bookings-___BookingEditForm-module__internal-notes-segment___NYfCF{background:#db9200}.rb-client-js-common-bookings-___BookingEditForm-module__recurring-every-label___4orkq{font-size:13px;margin-bottom:.5rem;font-weight:bold}.rb-client-js-common-bookings-___BookingEditForm-module__repeat-frequency-disabled-notice___a8U6P .icon.dont{font-size:1.5em !important}
+.rb-client-js-common-bookings-___DummyTimeline-module__blurred-timeline___Wdyvx{filter:blur(0.4rem) grayscale(1);pointer-events:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+.rb-client-js-common-bookings-___BookingEdit-module__booking-edit-modal-header___kNlMw{display:flex !important;justify-content:space-between;align-items:center}.rb-client-js-common-bookings-___BookingEdit-module__ongoing-booking-info___iay3i .icon.play{font-size:1.5em !important}.rb-client-js-common-bookings-___BookingEdit-module__booking-conflicts-info___C\+lMB{flex-grow:unset !important;margin-top:20px}
+.rb-client-js-modules-calendar-___CalendarListView-module__active-bookings___EZuXS{margin-top:15px}.rb-client-js-modules-calendar-___CalendarListView-module__active-bookings___EZuXS .redux-lazy-scroll{overflow:unset !important}.rb-client-js-modules-calendar-___CalendarListView-module__active-bookings___EZuXS .rb-client-js-modules-calendar-___CalendarListView-module__day-cards___Dmsa2 .rb-client-js-modules-calendar-___CalendarListView-module__day-cards-header___VhfEV{display:flex;align-items:center;height:50px}.rb-client-js-modules-calendar-___CalendarListView-module__active-bookings___EZuXS .rb-client-js-modules-calendar-___CalendarListView-module__day-cards___Dmsa2 .rb-client-js-modules-calendar-___CalendarListView-module__day-cards-container___YeSGb{margin-right:1em}.rb-client-js-modules-calendar-___CalendarListView-module__active-bookings___EZuXS .rb-client-js-modules-calendar-___CalendarListView-module__day-cards___Dmsa2 .icon.calendar.outline{font-size:1.2em}.rb-client-js-modules-calendar-___CalendarListView-module__active-bookings___EZuXS .rb-client-js-modules-calendar-___CalendarListView-module__day-cards___Dmsa2 .cards{margin-top:0}.rb-client-js-modules-calendar-___CalendarListView-module__active-bookings___EZuXS .rb-client-js-modules-calendar-___CalendarListView-module__day-cards___Dmsa2 .rb-client-js-modules-calendar-___CalendarListView-module__booking-card___y5JkI .rb-client-js-modules-calendar-___CalendarListView-module__booking-card-header___Sg-X1,.rb-client-js-modules-calendar-___CalendarListView-module__active-bookings___EZuXS .rb-client-js-modules-calendar-___CalendarListView-module__day-cards___Dmsa2 .rb-client-js-modules-calendar-___CalendarListView-module__booking-card___y5JkI .rb-client-js-modules-calendar-___CalendarListView-module__booking-booked-for___ck-2w{text-overflow:ellipsis;overflow:hidden;white-space:nowrap}
+.ui.grid > .row.rb-client-js-modules-calendar-___Calendar-module__row___92Vfe{display:block}.rb-client-js-modules-calendar-___Calendar-module__calendar-filters___LoBAD{display:flex;justify-content:space-between}.rb-client-js-modules-calendar-___Calendar-module__calendar-filters___LoBAD>:not(:first-child){margin-bottom:10px}.rb-client-js-modules-calendar-___Calendar-module__calendar-filters___LoBAD .rb-client-js-modules-calendar-___Calendar-module__view-switch___07How{display:flex;align-items:flex-start}.rb-client-js-modules-calendar-___Calendar-module__calendar-filters___LoBAD .rb-client-js-modules-calendar-___Calendar-module__view-switch___07How .icon:last-child{margin-right:.75em}
+.rb-client-js-common-rooms-___RoomStats-module__room-stats___ODsU2{display:flex;justify-content:space-around;color:#bbb}@media(min-width: 768px){.rb-client-js-common-rooms-___RoomStats-module__room-stats___ODsU2{padding:0 3em}}.rb-client-js-common-rooms-___RoomStats-module__room-stats___ODsU2 .rb-client-js-common-rooms-___RoomStats-module__stats-box___hYOOu{text-transform:uppercase;background-color:#f9f9f9;width:100%}.rb-client-js-common-rooms-___RoomStats-module__room-stats___ODsU2 .rb-client-js-common-rooms-___RoomStats-module__stats-box___hYOOu .rb-client-js-common-rooms-___RoomStats-module__title___C5NHH{font-weight:bold;padding:.5em 1em;background-color:#ecf8f5}.rb-client-js-common-rooms-___RoomStats-module__room-stats___ODsU2 .rb-client-js-common-rooms-___RoomStats-module__stats-box___hYOOu .rb-client-js-common-rooms-___RoomStats-module__value-box___ry6qT{padding:.5em 1em}.rb-client-js-common-rooms-___RoomStats-module__room-stats___ODsU2 .rb-client-js-common-rooms-___RoomStats-module__stats-box___hYOOu .rb-client-js-common-rooms-___RoomStats-module__value-box___ry6qT .rb-client-js-common-rooms-___RoomStats-module__days___mJBSX{font-size:.8em}.rb-client-js-common-rooms-___RoomStats-module__room-stats___ODsU2 .rb-client-js-common-rooms-___RoomStats-module__stats-box___hYOOu .rb-client-js-common-rooms-___RoomStats-module__value-box___ry6qT .rb-client-js-common-rooms-___RoomStats-module__value___fHAhf{font-size:1.25em;font-weight:bold}.rb-client-js-common-rooms-___RoomStats-module__room-stats___ODsU2 .rb-client-js-common-rooms-___RoomStats-module__stats-box___hYOOu .rb-client-js-common-rooms-___RoomStats-module__note___5jNFD{text-transform:none;padding:0 1em;font-size:.85em}.rb-client-js-common-rooms-___RoomStats-module__placeholder___T1UDF{margin:0 3em}
+.rb-client-js-modules-admin-___AdminRoomItem-module__room-item___0u6hg .rb-client-js-modules-admin-___AdminRoomItem-module__room-item-image___Km39b{height:90px !important}.rb-client-js-modules-admin-___AdminRoomItem-module__room-item___0u6hg .rb-client-js-modules-admin-___AdminRoomItem-module__room-item-header___u0JDX{display:flex !important;justify-content:space-between;align-items:center}
+.rb-client-js-modules-admin-___AdminLocationRooms-module__header___5DE3Q{display:flex;justify-content:space-between}
+.rb-client-js-modules-admin-___AdminMenu-module__admin-menu___Waixj .rb-client-js-modules-admin-___AdminMenu-module__locations-header___9bWqi{display:flex;justify-content:space-between}.rb-client-js-modules-admin-___AdminMenu-module__admin-menu___Waixj .item a{color:rgba(0,0,0,.87) !important}.rb-client-js-modules-admin-___AdminMenu-module__admin-menu___Waixj .item a.active{background-color:rgba(0,0,0,0) !important;font-weight:700;color:rgba(0,0,0,.95) !important}
+.rb-client-js-modules-admin-___EditableList-module__header___ETUdx{display:flex;justify-content:space-between}.rb-client-js-modules-admin-___EditableList-module__item___M0IO8{display:flex;align-items:center}.rb-client-js-modules-admin-___EditableList-module__item___M0IO8.rb-client-js-modules-admin-___EditableList-module__editing___e2poy{align-items:normal}.rb-client-js-modules-admin-___EditableList-module__item___M0IO8 .rb-client-js-modules-admin-___EditableList-module__info___btTDX{flex-grow:1}.rb-client-js-modules-admin-___EditableList-module__item___M0IO8 .rb-client-js-modules-admin-___EditableList-module__info___btTDX .rb-client-js-modules-admin-___EditableList-module__name___UuMhD{font-size:1.1em;margin-right:.5em}.rb-client-js-modules-admin-___EditableList-module__item___M0IO8 form{flex-grow:1;padding-right:2em}.rb-client-js-modules-admin-___EditableList-module__item___M0IO8 .rb-client-js-modules-admin-___EditableList-module__actions___ondjO{white-space:nowrap}.rb-client-js-modules-admin-___EditableList-module__item___M0IO8 .rb-client-js-modules-admin-___EditableList-module__actions___ondjO button.basic,.rb-client-js-modules-admin-___EditableList-module__item___M0IO8 .rb-client-js-modules-admin-___EditableList-module__actions___ondjO button.basic.negative,.rb-client-js-modules-admin-___EditableList-module__item___M0IO8 .rb-client-js-modules-admin-___EditableList-module__actions___ondjO button.basic.negative:hover{box-shadow:none !important}
+.leaflet-draw-section{position:relative}.leaflet-draw-toolbar{margin-top:12px}.leaflet-draw-toolbar-top{margin-top:0}.leaflet-draw-toolbar-notop a:first-child{border-top-right-radius:0}.leaflet-draw-toolbar-nobottom a:last-child{border-bottom-right-radius:0}.leaflet-draw-toolbar a{background-image:url(/dist/mod_assets/_/_/_/node_modules/leaflet-draw/dist/images/spritesheet.deac1d4a.png);background-image:linear-gradient(transparent,transparent),url(/dist/mod_assets/_/_/_/node_modules/leaflet-draw/dist/images/spritesheet.fd5728f2.svg);background-repeat:no-repeat;background-size:300px 30px;background-clip:padding-box}.leaflet-retina .leaflet-draw-toolbar a{background-image:url(/dist/mod_assets/_/_/_/node_modules/leaflet-draw/dist/images/spritesheet-2x.6a1e950d.png);background-image:linear-gradient(transparent,transparent),url(/dist/mod_assets/_/_/_/node_modules/leaflet-draw/dist/images/spritesheet.fd5728f2.svg)}
+.leaflet-draw a{display:block;text-align:center;text-decoration:none}.leaflet-draw a .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}.leaflet-draw-actions{display:none;list-style:none;margin:0;padding:0;position:absolute;left:26px;top:0;white-space:nowrap}.leaflet-touch .leaflet-draw-actions{left:32px}.leaflet-right .leaflet-draw-actions{right:26px;left:auto}.leaflet-touch .leaflet-right .leaflet-draw-actions{right:32px;left:auto}.leaflet-draw-actions li{display:inline-block}
+.leaflet-draw-actions li:first-child a{border-left:0}.leaflet-draw-actions li:last-child a{-webkit-border-radius:0 4px 4px 0;border-radius:0 4px 4px 0}.leaflet-right .leaflet-draw-actions li:last-child a{-webkit-border-radius:0;border-radius:0}.leaflet-right .leaflet-draw-actions li:first-child a{-webkit-border-radius:4px 0 0 4px;border-radius:4px 0 0 4px}.leaflet-draw-actions a{background-color:#919187;border-left:1px solid #AAA;color:#FFF;font:11px/19px "Helvetica Neue",Arial,Helvetica,sans-serif;line-height:28px;text-decoration:none;padding-left:10px;padding-right:10px;height:28px}
+.leaflet-touch .leaflet-draw-actions a{font-size:12px;line-height:30px;height:30px}.leaflet-draw-actions-bottom{margin-top:0}.leaflet-draw-actions-top{margin-top:1px}.leaflet-draw-actions-top a,.leaflet-draw-actions-bottom a{height:27px;line-height:27px}.leaflet-draw-actions a:hover{background-color:#a0a098}.leaflet-draw-actions-top.leaflet-draw-actions-bottom a{height:26px;line-height:26px}.leaflet-draw-toolbar .leaflet-draw-draw-polyline{background-position:-2px -2px}.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-polyline{background-position:0 -1px}
+.leaflet-draw-toolbar .leaflet-draw-draw-polygon{background-position:-31px -2px}.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-polygon{background-position:-29px -1px}.leaflet-draw-toolbar .leaflet-draw-draw-rectangle{background-position:-62px -2px}.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-rectangle{background-position:-60px -1px}.leaflet-draw-toolbar .leaflet-draw-draw-circle{background-position:-92px -2px}.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-circle{background-position:-90px -1px}
+.leaflet-draw-toolbar .leaflet-draw-draw-marker{background-position:-122px -2px}.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-marker{background-position:-120px -1px}.leaflet-draw-toolbar .leaflet-draw-draw-circlemarker{background-position:-273px -2px}.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-circlemarker{background-position:-271px -1px}.leaflet-draw-toolbar .leaflet-draw-edit-edit{background-position:-152px -2px}.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-edit-edit{background-position:-150px -1px}
+.leaflet-draw-toolbar .leaflet-draw-edit-remove{background-position:-182px -2px}.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-edit-remove{background-position:-180px -1px}.leaflet-draw-toolbar .leaflet-draw-edit-edit.leaflet-disabled{background-position:-212px -2px}.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-edit-edit.leaflet-disabled{background-position:-210px -1px}.leaflet-draw-toolbar .leaflet-draw-edit-remove.leaflet-disabled{background-position:-242px -2px}.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-edit-remove.leaflet-disabled{background-position:-240px -2px}
+.leaflet-mouse-marker{background-color:#fff;cursor:crosshair}.leaflet-draw-tooltip{background:#363636;background:rgba(0,0,0,0.5);border:1px solid transparent;-webkit-border-radius:4px;border-radius:4px;color:#fff;font:12px/18px "Helvetica Neue",Arial,Helvetica,sans-serif;margin-left:20px;margin-top:-21px;padding:4px 8px;position:absolute;visibility:hidden;white-space:nowrap;z-index:6}.leaflet-draw-tooltip:before{border-right:6px solid black;border-right-color:rgba(0,0,0,0.5);border-top:6px solid transparent;border-bottom:6px solid transparent;content:"";position:absolute;top:7px;left:-7px}
+.leaflet-error-draw-tooltip{background-color:#f2dede;border:1px solid #e6b6bd;color:#b94a48}.leaflet-error-draw-tooltip:before{border-right-color:#e6b6bd}.leaflet-draw-tooltip-single{margin-top:-12px}.leaflet-draw-tooltip-subtext{color:#f8d5e4}.leaflet-draw-guide-dash{font-size:1%;opacity:.6;position:absolute;width:5px;height:5px}.leaflet-edit-marker-selected{background-color:rgba(254,87,161,0.1);border:4px dashed rgba(254,87,161,0.6);-webkit-border-radius:4px;border-radius:4px;box-sizing:content-box}
+.leaflet-edit-move{cursor:move}.leaflet-edit-resize{cursor:pointer}.leaflet-oldie .leaflet-draw-toolbar{border:1px solid #999}
+.rb-client-js-modules-admin-___MapAreasPage-module__areas-map-container___5GfZn .leaflet-container{height:1000px;font-size:14px}.rb-client-js-modules-admin-___MapAreasPage-module__areas-map-container___5GfZn .leaflet-draw-section{border:none;font-family:"Muli","Helvetica Neue","Arial","Helvetica",sans-serif}.area-default{margin-left:5px;font-weight:bold}.actions .field{display:inline-block}
+.ui.message>.header+.fields{margin-top:3px}
+.rb-client-js-modules-admin-___AdminArea-module__admin-area___I19lv{margin-top:20px}
+.ui.list>.rb-client-js-modules-landing-___UpcomingBookings-module__upcoming-bookings-item___1h7Bc.item{cursor:pointer}.ui.list>.rb-client-js-modules-landing-___UpcomingBookings-module__upcoming-bookings-item___1h7Bc.item .description{margin:.5em 0}.ui.list>.rb-client-js-modules-landing-___UpcomingBookings-module__upcoming-bookings-item___1h7Bc.item .rb-client-js-modules-landing-___UpcomingBookings-module__booking-reason___vACsc{font-style:italic;color:#999}.rb-client-js-modules-landing-___UpcomingBookings-module__upcoming-bookings-list___314Us{overflow:hidden;max-height:150px}.rb-client-js-modules-landing-___UpcomingBookings-module__upcoming-item-img-container___PdgLp{position:relative;width:80%;margin:auto}.rb-client-js-modules-landing-___UpcomingBookings-module__upcoming-item-img-container___PdgLp .rb-client-js-modules-landing-___UpcomingBookings-module__upcoming-item-room-notch___p6nvt{position:absolute;bottom:0;width:100%}.rb-client-js-modules-landing-___UpcomingBookings-module__upcoming-item-img-container___PdgLp .rb-client-js-modules-landing-___UpcomingBookings-module__upcoming-item-room-notch___p6nvt .rb-client-js-modules-landing-___UpcomingBookings-module__upcoming-item-room-name___m8Waf{background:#fff;padding:.2em .5em;border-radius:2px 0 0 2px}
+@keyframes rb-client-js-modules-landing-___Landing-module__fade-slide-down___umdR2{0%{opacity:0;transform:translate(-2rem, -2rem)}100%{opacity:1;transform:none}}.rb-client-js-modules-landing-___Landing-module__landing-page___tdxBk.ui.grid{height:calc(100vh - (50px + 75px + var(--extra-bars, 0)*50px) - 0px);align-content:space-between;flex-direction:column}.rb-client-js-modules-landing-___Landing-module__landing-page___tdxBk.ui.grid::before{background-image:url(/images/globe__vdfba68f9.png);background-size:cover;height:calc(100vh - (50px + 75px + var(--extra-bars, 0)*50px) - 0px);content:" ";position:absolute;left:0;width:120%;animation:rb-client-js-modules-landing-___Landing-module__fade-slide-down___umdR2 2s ease-out forwards}.rb-client-js-modules-landing-___Landing-module__landing-page___tdxBk.ui.grid .rb-client-js-modules-landing-___Landing-module__landing-page-form___y1LhT{flex-grow:1}.rb-client-js-modules-landing-___Landing-module__landing-page___tdxBk.ui.grid .rb-client-js-modules-landing-___Landing-module__landing-page-form___y1LhT .ui.form{display:flex;align-items:center;flex-direction:column}.rb-client-js-modules-landing-___Landing-module__landing-page___tdxBk.ui.grid .rb-client-js-modules-landing-___Landing-module__landing-page-form___y1LhT::before{content:" ";width:100%;height:100%;position:absolute;background-color:rgba(255,255,255,.4)}.rb-client-js-modules-landing-___Landing-module__landing-page___tdxBk.ui.grid .rb-client-js-modules-landing-___Landing-module__landing-page-form___y1LhT .ui.checkbox.radio{padding:.5em;border-radius:.4em}.rb-client-js-modules-landing-___Landing-module__landing-page___tdxBk.ui.grid .rb-client-js-modules-landing-___Landing-module__landing-page-form___y1LhT .ui.checkbox.radio label{color:#333;font-weight:bold}.rb-client-js-modules-landing-___Landing-module__landing-page___tdxBk.ui.grid .rb-client-js-modules-landing-___Landing-module__landing-page-form___y1LhT .ui.checkbox.radio.checked{background-color:#45ba97}.rb-client-js-modules-landing-___Landing-module__landing-page___tdxBk.ui.grid .rb-client-js-modules-landing-___Landing-module__landing-page-form___y1LhT .ui.checkbox.radio.checked label{color:#fff}.rb-client-js-modules-landing-___Landing-module__landing-page___tdxBk.ui.grid .rb-client-js-modules-landing-___Landing-module__landing-page-form___y1LhT .rb-client-js-modules-landing-___Landing-module__search-input___\+oKDK{padding:0}.rb-client-js-modules-landing-___Landing-module__landing-page___tdxBk.ui.grid .rb-client-js-modules-landing-___Landing-module__landing-page-card___jCe4R.ui.card{transition:max-height .25s ease-out;margin:10vh auto auto auto;width:unset}@media(max-width: 768px){.rb-client-js-modules-landing-___Landing-module__landing-page___tdxBk.ui.grid .rb-client-js-modules-landing-___Landing-module__landing-page-card___jCe4R.ui.card{width:100%;max-height:100%;margin-top:1rem}}@media(min-width: 768px){.rb-client-js-modules-landing-___Landing-module__landing-page___tdxBk.ui.grid .rb-client-js-modules-landing-___Landing-module__landing-page-card___jCe4R.ui.card{min-width:520px}}@media(max-height: 600px){.rb-client-js-modules-landing-___Landing-module__landing-page___tdxBk.ui.grid .rb-client-js-modules-landing-___Landing-module__landing-page-card___jCe4R.ui.card{margin-top:auto}}.rb-client-js-modules-landing-___Landing-module__landing-page___tdxBk.ui.grid .rb-client-js-modules-landing-___Landing-module__landing-page-card___jCe4R.ui.card .rb-client-js-modules-landing-___Landing-module__landing-page-card-content___CeACH{padding:1em}@media(max-width: 768px){.rb-client-js-modules-landing-___Landing-module__landing-page___tdxBk.ui.grid .rb-client-js-modules-landing-___Landing-module__landing-page-card___jCe4R.ui.card .rb-client-js-modules-landing-___Landing-module__landing-page-card-content___CeACH{margin:auto 1em}}.rb-client-js-modules-landing-___Landing-module__landing-page___tdxBk.ui.grid .rb-client-js-modules-landing-___Landing-module__landing-page-lower-row___46v-s{height:300px;background-color:#fff;padding:1em 0 0 0;margin-bottom:-1rem}.rb-client-js-modules-landing-___Landing-module__landing-page___tdxBk.ui.grid .rb-client-js-modules-landing-___Landing-module__landing-page-lower-row___46v-s .rb-client-js-modules-landing-___Landing-module__lower-row___R3vLy .statistics .value,.rb-client-js-modules-landing-___Landing-module__landing-page___tdxBk.ui.grid .rb-client-js-modules-landing-___Landing-module__landing-page-lower-row___46v-s .rb-client-js-modules-landing-___Landing-module__lower-row___R3vLy .statistics .label{color:#7dcfb6}.rb-client-js-modules-landing-___Landing-module__landing-page___tdxBk.ui.grid .rb-client-js-modules-landing-___Landing-module__landing-page-lower-row___46v-s .rb-client-js-modules-landing-___Landing-module__lower-row___R3vLy .statistics:not(:last-child){margin-right:70px}.rb-client-js-modules-landing-___Landing-module__landing-page___tdxBk.ui.grid .rb-client-js-modules-landing-___Landing-module__landing-page-lower-row___46v-s .rb-client-js-modules-landing-___Landing-module__lower-row___R3vLy .statistics .statistic + .statistic{margin-left:3em}.rb-client-js-modules-landing-___Landing-module__landing-page___tdxBk.ui.grid .rb-client-js-modules-landing-___Landing-module__landing-page-lower-row___46v-s .rb-client-js-modules-landing-___Landing-module__lower-row___R3vLy .statistics .statistic:nth-child(even)>*{color:#3ea888}
+.rb-client-js-components-___AdminOverrideBar-module__admin-override-bar___DPQeq{display:flex;padding:0 20px 0 10px;margin:0;height:30px;line-height:30px;background-color:#f80;color:#fff}.rb-client-js-components-___AdminOverrideBar-module__admin-override-bar___DPQeq .rb-client-js-components-___AdminOverrideBar-module__disable___E3Ihi{margin-left:auto;cursor:pointer}.rb-client-js-components-___AdminOverrideBar-module__admin-override-bar___DPQeq kbd{display:inline-block;border-radius:.25em;padding:.1em .5em;margin:0 .2em;line-height:1.25em;background-color:#333;border:.031em solid #999;box-shadow:inset 0 -0.1em 0 #999}
+.rb-client-js-components-___MenuItem-module__rb-menu-item___7D0Th{background-color:#7dcfb6;transition:background-color .25s ease-in;height:100%;flex-grow:1;text-align:center;font-size:1.2em}.rb-client-js-components-___MenuItem-module__rb-menu-item___7D0Th a,.rb-client-js-components-___MenuItem-module__rb-menu-item___7D0Th a:hover{color:#fff;display:block}.rb-client-js-components-___MenuItem-module__rb-menu-item___7D0Th:hover{background:#6ac8ac}.rb-client-js-components-___MenuItem-module__rb-menu-item___7D0Th .rb-client-js-components-___MenuItem-module__disabled___rffyt{color:#daf1ea;display:block}.rb-client-js-components-___MenuItem-module__rb-menu-item___7D0Th.active{border-bottom:none;background:#58c1a1}.rb-client-js-components-___MenuItem-module__rb-menu-item___7D0Th.selected{background:#45ba97}
+ul.rb-client-js-components-___Menu-module__rb-menu___KTztc{list-style-type:none;display:flex;flex-direction:row;justify-content:space-around;background-color:#7dcfb6;border-bottom:none;line-height:75px;margin-bottom:0;margin-top:0;padding:0;width:100%}
+.rb-client-js-components-___SidebarMenu-module__sidebar___TVb2j.inverted.menu{background-color:#1a69a4;top:calc(125px + var(--extra-bars, 0)*50px - var(--offset, 0)*1px);height:calc(100% - 125px - var(--extra-bars, 0)*50px + var(--offset, 0)*1px) !important;position:fixed !important}.rb-client-js-components-___SidebarMenu-module__sidebar___TVb2j.inverted.menu .rb-client-js-components-___SidebarMenu-module__bottom-align___ZfQA8{position:absolute;bottom:0;width:100%}.rb-client-js-components-___SidebarMenu-module__sidebar-button___fHFJU{transition:color .25s ease-in,transform .25s ease-in;color:#fff;cursor:pointer}.rb-client-js-components-___SidebarMenu-module__sidebar-button___fHFJU:hover{color:#3ea888}.rb-client-js-components-___SidebarMenu-module__sidebar-button___fHFJU.active{color:#30836a;transform:rotate(90deg)}.rb-client-js-components-___SidebarMenu-module__sidebar-button___fHFJU i.icon{margin:0}
+.rb-client-js-components-___App-module__rb-layout___4-78p{display:flex;flex-direction:column}.rb-client-js-components-___App-module__rb-menu-bar___jdvem{background-color:#7dcfb6;padding:0 20px;margin:0;height:75px;line-height:75px;display:flex;z-index:2}.rb-client-js-components-___App-module__rb-menu-bar___jdvem .row{padding:0}.rb-client-js-components-___App-module__rb-menu-bar___jdvem a{text-decoration:none}.rb-client-js-components-___App-module__rb-menu-bar___jdvem h1{display:inline-block;margin:0;color:#fff;line-height:75px}.rb-client-js-components-___App-module__rb-menu-bar___jdvem h1 a{color:#fff;margin-left:.2em}.rb-client-js-components-___App-module__rb-menu-bar___jdvem .column{display:flex}.rb-client-js-components-___App-module__rb-menu-bar-side-left___cmsrh{flex-grow:1;display:flex}.rb-client-js-components-___App-module__rb-menu-bar-side-left___cmsrh *{margin-right:auto}.rb-client-js-components-___App-module__rb-menu-bar-side-right___ePX8S{flex-grow:1;display:flex}.rb-client-js-components-___App-module__rb-menu-bar-side-right___ePX8S *{margin-left:auto}.rb-client-js-components-___App-module__rb-menu-bar-menu___P1NME{flex-grow:3}.rb-client-js-components-___App-module__rb-content___YjslM{z-index:1}.rb-client-js-components-___App-module__rb-content___YjslM>.ui.grid:not(.landing-wrapper){padding:2em}@media(max-width: 768px){.rb-client-js-components-___App-module__rb-content___YjslM>.ui.grid:not(.landing-wrapper){padding-top:1em}}.rb-client-js-components-___App-module__rb-pushable___gHirk{min-height:calc(100vh - 75px - var(--extra-bars, 0)*50px - 50px);transform:unset !important;position:relative}.rb-client-js-components-___App-module__rb-pushable___gHirk .rb-client-js-components-___App-module__rb-pusher___xKHUI.pusher{min-height:calc(100vh - 75px - var(--extra-bars, 0)*50px - 50px)}.rb-client-js-components-___App-module__rb-pushable___gHirk .rb-client-js-components-___App-module__rb-pusher___xKHUI.pusher::after{-webkit-backdrop-filter:blur(0.5rem);backdrop-filter:blur(0.5rem)}.modals.ui.dimmer{-webkit-backdrop-filter:blur(0.5rem);backdrop-filter:blur(0.5rem)}
+.ui.inverted>.ui.modal>.close{color:#333}input{font-size:100%}body{overflow-y:scroll}a{cursor:pointer}@media(max-width: 768px){.ui.selection.dropdown{min-width:100%}}.indico-top-bar{background-color:#007cac;height:50px;display:flex;align-items:center;padding:0 20px}.indico-top-bar .indico-top-bar-logo{display:flex;align-items:center}.indico-top-bar .indico-top-bar-logo img{height:30px}.indico-top-bar .indico-user-menu{margin-left:auto}.room-edit-modal-add-btn{margin-bottom:15px !important}.flex-container{display:flex;align-items:center;margin-bottom:5px}.flex-container .DateRangePicker{padding-bottom:0 !important}.delete-button{cursor:pointer;color:#f91f1f;opacity:.5 !important;padding-left:15px}.delete-button:hover{opacity:1 !important}.header.legend-header{display:flex !important;align-items:center}.header.legend-header .icon.legend-info-icon{display:flex;align-items:center;color:#bbb;margin-left:.5em;font-size:.9em}.filter-row{display:flex;align-items:baseline;flex-direction:row;margin-bottom:10px}.filter-row .filter-row-filters{display:flex;flex-direction:row;flex-wrap:wrap}.filter-row .filter-row-filters>*{margin-right:10px !important;margin-bottom:10px !important}.event-booking-page .section.searchable-field{overflow:visible}.event-booking-page .time-column,.event-booking-page .link-column{width:8em}.event-booking-page .room-column{width:6em}.event-booking-page .link-data span{-webkit-text-decoration:dotted underline #bbb;text-decoration:dotted underline #bbb}.event-booking-page tr.disabled{background-color:#f9f9f9}.event-booking-page tr.disabled td{color:#999}.event-booking-page .booking-status{padding-left:.5em}.event-booking-page .booking-status.icon-disable{color:#a76766}.event-booking-page .booking-status.icon-time{color:#f80}.announcement-bar{height:50px;display:flex;justify-content:space-between;align-items:center;padding:0 20px}.announcement-bar .content{display:flex;flex-grow:1;align-items:center}.announcement-bar .icon{margin-right:.5em}.announcement-bar.weak-hidden{display:none}.announcement-bar.highlight{background-color:#edf3fd;color:#007cac}.announcement-bar.warning{background-color:#ffefd4;color:#9c793b}.announcement-bar.error{background-color:#f91f1f;color:#f2dede}.announcement-bar .close-button{margin-left:auto;cursor:pointer;line-height:1em}.impersonation-bar{height:50px;display:flex;justify-content:space-between;align-items:center;padding:0 20px;height:50px;background-color:#333;color:#f0bb5e;box-shadow:0 -5px 1px -2px rgba(0,0,0,.2) inset}.impersonation-bar .content{display:flex;flex-grow:1;align-items:center}.impersonation-bar .icon{margin-right:.5em}.impersonation-bar.weak-hidden{display:none}.impersonation-bar strong{color:#f6d9a4}.impersonation-bar .icon{color:#f0bb5e}.impersonation-bar .undo-login-as{margin-left:auto;cursor:pointer;line-height:1em}.scrolling-disabled{overflow-y:hidden}
+
+/*# sourceMappingURL=module_rb.bcf34771.css.map*/

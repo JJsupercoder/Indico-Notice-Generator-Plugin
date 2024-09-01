@@ -1,0 +1,98 @@
+{% from 'events/management/_create_event_button.html' import create_event_link %}
+{% from 'announcement/display.html' import render_announcements %}
+{% from 'core/impersonation.html' import render_impersonation %}
+
+{{ render_impersonation(legacy=true) }}
+{{ render_announcements(legacy=true) }}
+
+<div class="page-header clearfix">
+    <div class="flexrow f-j-space-between f-a-start">
+        {% block logo %}
+            {%- set logo_url = indico_config.LOGO_URL or (indico_config.IMAGES_BASE_URL + '/logo_indico_bw.svg') -%}
+            <a id="header-logo"
+               href="{{ url_for_index() }}"
+               aria-label="{% trans %}Indico main page{% endtrans %}"
+               aria-current="{{ url_for_index() == request.path }}"
+            >
+                <img class="header-logo" src="{{ logo_url }}" alt="{% trans %}Indico logo{% endtrans %}">
+            </a>
+        {% endblock %}
+
+        <div class="flexcol">
+            {{ render_session_bar(protected_object=protected_object, local_tz=local_tz, force_local_tz=force_local_tz,
+                                  force_locale=force_locale, force_locale_alts=force_locale_alts) }}
+            {{ template_hook('page-header', category=category) }}
+        </div>
+    </div>
+
+    <div id="global-menu" class="global-menu toolbar">
+        {% block global_menu %}
+            <menu>
+                {% for item in top_menu_items recursive %}
+                    {% if loop.depth0 %}
+                        {# we're inside a section #}
+                        <li>
+                            {% if item.section == 'create-event' and item.url in ('lecture', 'meeting', 'conference') %}
+                                {# special handling for event creation links #}
+                                {{ create_event_link(category, item.url, item.title, id=item.name) }}
+                            {% else %}
+                                <a href="{{ item.url }}">{{ item.title }}</a>
+                            {% endif %}
+                        </li>
+                    {% elif not item.is_section %}
+                        <li><a href="{{ item.url }}">{{ item.title }}</a></li>
+                    {% elif item.items %}
+                        <li>
+                            <ind-menu>
+                                <button>{{ item.title }}</button>
+                                <menu>
+                                    {{ loop(item.items) }}
+                                </menu>
+                            </ind-menu>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </menu>
+        {% endblock %}
+    </div>
+</div>
+
+<template data-tooltip-for="create-lecture">
+    <p>
+        {%- trans -%}
+            A <strong>lecture</strong> is a simple event to announce a talk.
+        {%- endtrans -%}
+    </p>
+    <p>
+        {%- trans -%}
+            <strong>Features</strong>:
+            poster creation, participant management, ...
+        {%- endtrans -%}
+    </p>
+</template>
+<template data-tooltip-for="create-meeting">
+    <p>
+        {%- trans -%}
+            A <strong>meeting</strong> is an event that defines an agenda with multiple talks.
+        {%- endtrans -%}
+    </p>
+    <p>
+        {%- trans -%}
+            <strong>Features</strong>:
+            timetable, minutes, poster creation, participants management, ...
+        {%- endtrans -%}
+    </p>
+</template>
+<template data-tooltip-for="create-conference">
+    <p>
+        {%- trans -%}
+            A <strong>conference</strong> is a complex event with features to manage the whole life cycle of a conference.
+        {%- endtrans -%}
+    </p>
+    <p>
+        {%- trans -%}
+            <strong>Features</strong>:
+            call for abstracts, registration, e-payment, timetable, badges creation, paper reviewing,...
+        {%- endtrans -%}
+    </p>
+</template>

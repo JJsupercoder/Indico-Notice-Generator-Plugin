@@ -1,0 +1,75 @@
+{% extends 'events/papers/emails/base.html' %}
+
+{% block subject_message %}
+    {%- if assign -%}
+        {% trans %}New paper review assignment{% endtrans %}
+    {%- else -%}
+        {% trans %}Removed from paper review assignment{% endtrans %}
+    {%- endif -%}
+{% endblock %}
+
+{% block header_subtitle %}
+    {% if assign -%}
+        {% trans %}New paper review assignment{% endtrans %}
+    {%- else -%}
+        {% trans %}Removed from paper review assignment{% endtrans %}
+    {%- endif %}
+{% endblock %}
+
+{% block content_header %}
+    <p>{% trans name=receiver.first_name %}Dear {{name }},{% endtrans %}</p>
+    {% if contribs | length == 1 %}
+        {% set contrib = contribs | first %}
+        {% if assign %}
+            <p>
+                {%- trans strong='<strong>'|safe, endstrong='</strong>'|safe, title=contrib.title, role_title=role.title -%}
+                    You have been assigned as a {{ strong }}{{ role_title }}{{ endstrong }} to the paper {{ strong }}{{ title }}{{ endstrong }}.
+                {%- endtrans -%}
+            </p>
+        {% else %}
+            <p>
+                {% trans strong='<strong>'|safe, endstrong='</strong>'|safe, title=contrib.title, role_title=role.title -%}
+                    You are no longer a {{ strong }}{{ role_title }}{{ endstrong }} for the paper {{ strong }}{{ title }}{{ endstrong }}.
+                {%- endtrans %}
+            </p>
+        {% endif %}
+    {% else %}
+        {% if assign %}
+            <p>
+                {% trans strong='<strong>'|safe, endstrong='</strong>'|safe, role_title=role.title -%}
+                    You have been assigned as a {{ strong }}{{ role_title }}{{ endstrong }} to the following papers:
+                {%- endtrans %}
+            </p>
+        {% else %}
+            <p>
+                {% trans strong='<strong>'|safe, endstrong='</strong>'|safe, role_title=role.title -%}
+                    You are no longer a {{ strong }}{{ role_title }}{{ endstrong }} for the following papers:
+                {%- endtrans %}
+            </p>
+        {% endif %}
+        <p>
+            <ul>
+                {% for contrib in contribs %}
+                    <li>{{ contrib.title }}</li>
+                {% endfor %}
+            </ul>
+        </p>
+    {% endif %}
+{% endblock %}
+
+{% block content_body %}
+    <p>{% trans %}You can have an overview of the papers assigned to you in the following page:{% endtrans %}</p>
+    {% if role.name == 'judge' %}
+        <p>
+            <a href="{{ url_for('papers.papers_list', event, management=false, _external=true) }}">
+                {{- url_for('papers.papers_list', event, management=false, _external=true) -}}
+            </a>
+        </p>
+    {% else %}
+        <p>
+            <a href="{{ url_for('papers.reviewing_area', event, _external=true) }}">
+                {{- url_for('papers.reviewing_area', event, _external=true) -}}
+            </a>
+        </p>
+    {% endif %}
+{% endblock %}

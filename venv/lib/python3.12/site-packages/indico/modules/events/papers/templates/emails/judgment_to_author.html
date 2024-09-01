@@ -1,0 +1,53 @@
+{% extends 'events/papers/emails/base.html' %}
+
+{% block subject_message %}{% trans %}Paper assessment{% endtrans %}{% endblock %}
+
+{% block header_subtitle %}{% trans %}Paper assessment{% endtrans %}{% endblock %}
+
+{% block header_subtitle_ref %}{% trans id=contribution.friendly_id %}ref #{{ id }}{% endtrans %}{% endblock %}
+
+{% block content_header %}
+    <p>{% trans name=receiver.first_name %}Dear {{name }},{% endtrans %}</p>
+    {% if paper.state.name == 'accepted' %}
+        <p>{% trans strong='<strong>'|safe, endstrong='</strong>'|safe, title=contribution.title -%}
+            Your paper {{ strong }}{{ title }}{{ endstrong }} has been {{ strong }}accepted{{ endstrong }}!
+        {%- endtrans %}</p>
+        <p>{% trans %}No further actions are required.{% endtrans %}</p>
+    {% elif paper.state.name == 'rejected' %}
+        <p>{% trans strong='<strong>'|safe, endstrong='</strong>'|safe, title=contribution.title -%}
+            Your paper {{ strong }}{{ title }}{{ endstrong }} has been {{ strong }}rejected{{ endstrong }}.
+        {%- endtrans %}</p>
+        <p>{% trans %}No further actions are required.{% endtrans %}</p>
+    {% else %}
+        <p>{% trans strong='<strong>'|safe, endstrong='</strong>'|safe, title=contribution.title -%}
+            A judge has requested some {{ strong }}changes{{ endstrong }} to your paper {{ strong }}{{ title }}{{ endstrong }}.
+        {%- endtrans %}</p>
+    {% endif %}
+
+{% endblock %}
+
+{% block content_body %}
+    {% if paper.judgment_comment %}
+        <dl>
+            <dt style="width: 30%; float: left;">{% trans %}Comment:{% endtrans %}</dt>
+            <dd style="width: 70%; float: left; margin: 0; min-height: 20px; white-space: pre-wrap; word-break: break-all; padding-left: 20px; box-sizing: border-box;">
+                {{- paper.judgment_comment -}}
+            </dd>
+        </dl>
+        <div style="clear: both;"></div>
+    {% endif %}
+{% endblock %}
+
+{% block content_footer %}
+    {% if paper.state.name == 'to_be_corrected' %}
+        <p>{% trans %}You may apply the modifications to your paper and submit the modified version (together with any additional files) for review.{% endtrans %}</p>
+        <p>{% trans %}In order to do that please proceed to your paper page:{% endtrans %}</p>
+    {% else %}
+        <p>{% trans %}To see your paper please use the following link:{% endtrans %}</p>
+    {% endif %}
+    <p>
+        <a href="{{ url_for('papers.paper_timeline', contribution, _external=true) }}">
+            {{- url_for('papers.paper_timeline', contribution, _external=true) -}}
+        </a>
+    </p>
+{% endblock %}

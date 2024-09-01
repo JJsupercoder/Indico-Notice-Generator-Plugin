@@ -1,0 +1,14 @@
+{% extends 'events/abstracts/emails/default_notification.txt' %}
+
+{% block subject -%}
+    {% trans %}Abstract Submission confirmation (#{abstract_id}){% endtrans %}
+{%- endblock %}
+
+{% block body -%}
+    {% trans -%}We've received your abstract "{abstract_title}" to which we have assigned id #{abstract_id}.{%- endtrans %}
+
+    {% trans linebreak='\n' -%}
+        Kind regards,{{linebreak}}
+        The organizers of {event_title}
+    {%- endtrans %}
+{%- endblock %}

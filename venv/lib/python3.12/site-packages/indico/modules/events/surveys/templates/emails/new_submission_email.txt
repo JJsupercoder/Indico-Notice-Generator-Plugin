@@ -1,0 +1,39 @@
+{% extends 'emails/base_i18n.txt' %}
+{% set survey = submission.survey %}
+
+{% block subject -%}
+    {% trans survey_title=survey.title, event_title=survey.event.title -%}
+        New survey submission for "{{ survey_title }}" in the event "{{ event_title }}"
+    {%- endtrans %}
+{%- endblock %}
+
+{% block header -%}{%- endblock %}
+
+{% block body -%}
+    {%- filter dedent -%}
+        {%- if submission.is_anonymous -%}
+            {%- trans survey_title=survey.title, event_title=survey.event.title -%}
+                A new submission has been made for the survey "{{ survey_title }}" in the event "{{ event_title }}".
+            {%- endtrans -%}
+        {%- else -%}
+            {%- trans survey_title=survey.title, event_title=survey.event.title, name=submission.user.full_name -%}
+                A new submission has been made for the survey "{{ survey_title }}" in the event "{{ event_title }}"
+                by {{ name }}.
+            {%- endtrans -%}
+        {%- endif %}
+
+        {% trans %}You can access the new submission here:{% endtrans %}
+        {{ url_for('surveys.display_submission', submission, _external=true) }}
+
+        {% trans %}You can access all the submissions by clicking on the link below:{% endtrans %}
+        {{ url_for('surveys.manage_survey', survey, _external=true) }}
+    {%- endfilter -%}
+{%- endblock %}
+
+{% block footer_title -%}
+    {% trans %}Surveys{% endtrans %}
+{%- endblock %}
+
+{% block footer_url -%}
+    {{ survey.event.external_url }}
+{%- endblock %}

@@ -1,0 +1,55 @@
+div.inbody {
+  background: white;
+}
+div.inbody {
+  width: 95%;
+  margin-left: 2px;
+  margin-right: 3%;
+  position: relative;
+}
+div.inbody {
+  margin: 0 auto;
+}
+div.inbody h1 {
+  background-color: blue;
+  text-align: center;
+  color: white;
+  font-size: 150%;
+  margin-top: 0.5cm;
+}
+div.inbody h2 {
+  text-align: center;
+  color: red;
+  font-size: 120%;
+  margin-top: 0.5cm;
+}
+div.inbody h5 {
+  text-align: right;
+  color: maroon;
+  margin-top: 2cm;
+  margin-right: 34px;
+}
+div.inbody p {
+  margin-left: 15px;
+  margin-right: 4px;
+  color: maroon;
+}
+
+div.inbody table {
+  width: 95%;
+  margin-left: 0.2em;
+  margin-right: 1em;
+  padding: 0;
+}
+div.inbody table.tab {
+  width: 100%;
+  color: blue;
+}
+div.inbody table.tab td {
+  margin: 0;
+  padding: 10px;
+}
+div.inbody table.tab th {
+  margin: left;
+  padding: 10px;
+}

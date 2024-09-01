@@ -1,0 +1,15 @@
+{% extends 'emails/base_i18n.html' %}
+
+{% block subject -%}
+    {% autoescape false -%}
+        [{{ plugin.friendly_name }}] {% trans %}Videoconference deleted:{% endtrans %} {{ vc_room.name }}
+    {%- endautoescape %}
+{%- endblock %}
+
+{% block header -%}
+<p>
+    {% trans room=vc_room.name, name=user.full_name -%}
+        The videoconferencing room "{{ room }}" has been deleted by {{ name }}.
+    {%- endtrans %}
+</p>
+{%- endblock %}

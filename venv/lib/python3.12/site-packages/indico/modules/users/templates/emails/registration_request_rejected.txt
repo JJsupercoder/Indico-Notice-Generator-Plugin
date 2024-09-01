@@ -1,0 +1,13 @@
+{% extends 'emails/base_i18n.txt' %}
+
+{% block subject -%}{% trans %}Your registration request has been rejected{% endtrans %}{%- endblock %}
+
+{% block header_recipient -%}
+    {% trans name=req.user_data.first_name %}Dear {{ name }},{% endtrans %}
+{%- endblock %}
+
+{% block body -%}
+    {% filter dedent -%}
+        {% trans %}Unfortunately your request to create an Indico profile has been denied.{% endtrans %}
+    {%- endfilter %}
+{%- endblock %}
