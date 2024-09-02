@@ -49,7 +49,6 @@ This line would need to be added every time if ubuntu is restarted. To prevent t
 For Bash, run this command: 
 nano ~/.bashrc
 At the End of the file, add the following line for INDICO_CONFIG variable:
-# Indico Conf Variable for pointing the location
 export INDICO_CONFIG="/home/jenson/dev/indico/src/indico/indico.conf"
 Save your changes by entering:
 source ~/.bashrc
