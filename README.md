@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/911fa8e1-2afc-42a8-94f5-8a05abf4236c)Indico PDF Generator Plugin Documentation
+Indico PDF Generator Plugin Documentation
 ________________________________________
 
 Plugin Overview
